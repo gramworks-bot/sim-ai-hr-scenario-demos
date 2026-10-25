@@ -1,0 +1,1029 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>The Shortlist Challenge</title><style>:root{color-scheme:light}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a navy programme band, a tab strip, then one 1080px working column.
+   "Try the scenario" is a five-stage flow (Brief > Conversation > Feedback > Reflection > Record); the conversation is a 16:9 video stage with captions. */
+:root{
+  --bg:#F4F6F9; --surface:#FFFFFF; --ink:#1B2437; --muted:#5B6578; --line:#D7DDE7; --chip:#EDF0F5;
+  --navy:#1F3864; --on-navy:#FFFFFF; --navy-soft:#E6EBF5;
+  --accent:#0F6E7A; --accent-soft:#E1F0F2; --on-accent:#FFFFFF;
+  --good:#1E7F4F; --good-soft:#E2F3E9; --warn:#A86300; --warn-soft:#FBEFD8; --bad:#B3261E; --bad-soft:#FBE4E2;
+  --you:#E1F0F2; --stage:#0E131C; --cap:#FFFFFF;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:"Source Sans 3", "Segoe UI", Arial, sans-serif;
+  --mono:"IBM Plex Mono", Consolas, "Courier New", monospace;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0F1420; --surface:#171E2D; --ink:#E8ECF3; --muted:#A3ADC0; --line:#2B3548; --chip:#222B3D;
+  --navy:#243E73; --on-navy:#FFFFFF; --navy-soft:#1C2A48;
+  --accent:#5CC3CF; --accent-soft:#12303A; --on-accent:#0B1A1D;
+  --good:#63C793; --good-soft:#10301F; --warn:#E5AB55; --warn-soft:#3A2A10; --bad:#F28B82; --bad-soft:#3B1816;
+  --you:#12303A; --stage:#05080E; --cap:#FFFFFF; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0F1420; --surface:#171E2D; --ink:#E8ECF3; --muted:#A3ADC0; --line:#2B3548; --chip:#222B3D;
+  --navy:#243E73; --on-navy:#FFFFFF; --navy-soft:#1C2A48;
+  --accent:#5CC3CF; --accent-soft:#12303A; --on-accent:#0B1A1D;
+  --good:#63C793; --good-soft:#10301F; --warn:#E5AB55; --warn-soft:#3A2A10; --bad:#F28B82; --bad-soft:#3B1816;
+  --you:#12303A; --stage:#05080E; --cap:#FFFFFF; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;line-height:1.2;margin:0;text-wrap:balance}
+h1{font-size:1.9rem} h2{font-size:1.4rem} h3{font-size:1.12rem} h4{font-size:1rem;font-family:var(--sans);font-weight:700}
+p{margin:0}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{background:var(--navy);color:var(--on-navy)}
+.top .wrap{padding-block:22px 18px;display:flex;flex-wrap:wrap;gap:14px 28px;align-items:flex-end;justify-content:space-between}
+.eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;opacity:.85}
+.top h1{margin-top:4px}
+.top .sub{opacity:.9;max-width:62ch;margin-top:6px}
+.idchips{display:flex;gap:8px;flex-wrap:wrap}
+.idchip{font-family:var(--mono);font-size:.8rem;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.tabs{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.tabs .wrap{display:flex;gap:4px;overflow-x:auto;padding-block:0}
+.tab{appearance:none;background:none;border:0;border-bottom:3px solid transparent;padding:14px 12px 11px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main.wrap{padding-block:24px 56px}
+.view>*+*{margin-top:22px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px}
+.card>*+*{margin-top:12px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.grid2>*,.grid3>*{min-width:0}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+.lead{font-size:1.08rem;max-width:68ch}
+ul,ol{margin:0;padding-left:1.25rem} li+li{margin-top:5px}
+.steps{counter-reset:s;list-style:none;padding:0;display:grid;gap:10px}
+.steps li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start}
+.steps li::before{counter-increment:s;content:counter(s);width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--on-navy);font-weight:700;display:grid;place-items:center;font-size:.9rem}
+.steps li strong{display:block}
+.pill{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:2px 9px;background:var(--chip);color:var(--muted);white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.accent{background:var(--accent-soft);color:var(--accent)}
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;border-radius:8px;padding:9px 16px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.quiet{border-color:transparent;color:var(--accent);padding-inline:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:700}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+.mono{font-family:var(--mono);font-size:.86rem}
+.note{border-left:4px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 8px 8px 0}
+.note.warn{border-color:var(--warn);background:var(--warn-soft)}
+.kv{display:grid;grid-template-columns:minmax(120px,160px) 1fr;gap:6px 14px}
+.kv dt{color:var(--muted);font-weight:600} .kv dd{margin:0}
+.statement{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;background:var(--surface)}
+.statement .id{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.statement .name{font-weight:700;margin-top:2px}
+.statement .plain{margin-top:6px}
+.statement .verbatim{margin-top:8px;font-size:.88rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+pre{margin:0;font-family:var(--mono);font-size:.8rem;line-height:1.45;background:var(--chip);border-radius:8px;padding:12px 14px;overflow-x:auto;max-height:420px}
+details summary{cursor:pointer;font-weight:600}
+
+.stages{display:flex;gap:6px;flex-wrap:wrap}
+.stage{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:inherit;font-weight:600;border-radius:999px;padding:7px 14px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.stage .n{font-family:var(--mono);font-size:.78rem;background:var(--chip);border-radius:999px;padding:0 7px}
+.stage[aria-current="step"]{border-color:var(--accent);color:var(--ink);background:var(--accent-soft)}
+.stage.done .n{background:var(--good-soft);color:var(--good)}
+.stage:disabled{opacity:.45;cursor:not-allowed}
+.status{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;font-size:.92rem}
+.status b{font-weight:700}
+
+/* video stage */
+.convo{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:16px}
+@media (max-width:760px){.convo{grid-template-columns:1fr}}
+.vstage{position:relative;aspect-ratio:16/9;max-width:100%;background:var(--stage);border-radius:10px;overflow:hidden}
+.vstage video,.vstage canvas{display:block;width:100%;height:100%;object-fit:cover}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:34px 18px 12px;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.6) 35%,rgba(0,0,0,.86));color:var(--cap);font-size:1.02rem;line-height:1.35;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.cap .who{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-bottom:2px}
+.vbadge{position:absolute;top:10px;left:12px;background:rgba(0,0,0,.55);color:#fff;font-size:.75rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 9px}
+.vbadge.rec::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#E5484D;margin-right:6px;vertical-align:1px}
+.stagectl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem;color:var(--muted)}
+.said{background:var(--you);border-radius:10px;padding:10px 14px}
+.said .who{font-size:.75rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.options{display:grid;gap:10px}
+.opt{appearance:none;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;border-radius:10px;padding:12px 14px;cursor:pointer;display:grid;grid-template-columns:28px 1fr;gap:10px}
+.opt:hover{border-color:var(--accent);background:var(--accent-soft)}
+.opt .k{font-family:var(--mono);font-weight:600;color:var(--muted)}
+.side{display:grid;gap:12px;align-content:start}
+.meter{height:10px;border-radius:999px;background:var(--chip);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--warn);transition:width .4s}
+.timer{font-family:var(--mono);font-size:1.3rem;font-variant-numeric:tabular-nums}
+.chatbox{display:grid;gap:8px}
+textarea,input[type=text]{width:100%;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;resize:vertical}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.mode{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:22px 1fr;gap:10px;cursor:pointer;background:var(--surface)}
+.mode.sel{border-color:var(--accent);background:var(--accent-soft)}
+.mode.off{opacity:.6;cursor:not-allowed}
+.mode input{margin-top:4px}
+.tr{display:grid;gap:6px;font-size:.9rem}
+.tr div b{color:var(--muted);font-weight:600}
+
+.banner{border-radius:var(--radius);padding:16px 18px;display:grid;gap:4px}
+.banner.good{background:var(--good-soft);border:1px solid var(--good)} .banner.warn{background:var(--warn-soft);border:1px solid var(--warn)} .banner.bad{background:var(--bad-soft);border:1px solid var(--bad)}
+.fb{display:grid;gap:10px}
+.fb .turn{display:grid;grid-template-columns:70px 1fr;gap:10px;font-size:.93rem}
+.fb .turn .q{font-weight:700}
+.rating{font-weight:700}
+.rating.met{color:var(--good)} .rating.partly{color:var(--warn)} .rating.notyet{color:var(--bad)}
+
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.flow .box{flex:1 1 150px;min-width:0;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface)}
+.flow .box b{display:block}
+.flow .box .w{font-size:.85rem;color:var(--muted)}
+.flow .box.canvas{border-color:var(--navy);box-shadow:inset 0 0 0 1px var(--navy)}
+.flow .box.eng{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.88rem;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:5px;border:1px solid var(--line)}
+footer.wrap{padding-block:0 40px;color:var(--muted);font-size:.86rem}
+@media (prefers-reduced-motion: reduce){.meter i{transition:none}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">AI for HR Programme · Course 1 · Unit 1 (LO1) · Video scenario-based role play</div>
+      <h1>C1-S1 The shortlist challenge</h1>
+      <p class="sub">A working demonstration of one scenario from the Course 1 scenario bank, set in a Singapore logistics SME: Daniel Lim, the hiring manager, speaks to the learner on screen as a photoreal, lip-synced avatar; the learner answers; the scenario engine scores the conversation against the IHRP performance statements, keeps the record, and the facilitator validates the reflection.</p>
+    </div>
+    <div class="idchips">
+      <span class="idchip">WFI L1 · Fair Hiring 1 &amp; 3</span>
+      <span class="idchip">AI Fluency · Tool Selection</span>
+      <span class="idchip">Demo · fictional data only</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" data-view="try" aria-selected="true">Try the scenario</button>
+    <button class="tab" role="tab" data-view="engine" aria-selected="false">Scenario engine</button>
+    <button class="tab" role="tab" data-view="guide" aria-selected="false">Learner guide</button>
+    <button class="tab" role="tab" data-view="facilitator" aria-selected="false">Facilitator view</button>
+    <button class="tab" role="tab" data-view="hosting" aria-selected="false">Hosting on Canvas</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ================= TRY ================= -->
+<section class="view" id="view-try">
+  <div class="card">
+    <div class="stages" id="stages">
+      <button class="stage" data-stage="brief" aria-current="step"><span class="n">1</span>Brief</button>
+      <button class="stage" data-stage="convo" disabled><span class="n">2</span>Conversation</button>
+      <button class="stage" data-stage="feedback" disabled><span class="n">3</span>Feedback</button>
+      <button class="stage" data-stage="reflect" disabled><span class="n">4</span>Reflection</button>
+      <button class="stage" data-stage="record" disabled><span class="n">5</span>Scenario record</button>
+    </div>
+    <div class="status" id="statusbar"></div>
+  </div>
+
+  <!-- BRIEF -->
+  <div id="p-brief">
+    <div class="grid2">
+      <div class="card">
+        <h2>The situation</h2>
+        <p><b>Harbourline Logistics Pte Ltd</b> (fictional) is a home-grown Singapore logistics company: 180 staff, a distribution centre in Tuas, customers in retail and FMCG. It is hiring an <b>Operations Planner</b> for the Tuas planning team. The job was advertised on the national jobs portal; 80 people applied. The AI screening tool the company trialled this year has produced a ranked list, and you have the shortlisting matrix scores for the four strongest applicants.</p>
+        <p>Daniel Lim, Head of Operations Planning (Singaporean, 46, twelve years in logistics operations), wants to interview <b>Marcus Tan</b> (a former colleague from his previous employer, "culture fit", AI match 92%) and one other, and set aside <b>Nurul Aisyah</b> (a qualified Singaporean candidate, AI match 71%). He has given you five minutes in Meeting Room 3B before his Tuas operations call.</p>
+        <dl class="kv">
+          <dt>Your role</dt><dd>HR business partner for Operations. You own the shortlisting process.</dd>
+          <dt>Counterpart</dt><dd>Daniel Lim, hiring manager. Impatient, results-driven, not hostile. He respects evidence once he sees it. On screen he is a photoreal avatar: an AI-generated likeness of a fictional person (no real individual), lip-synced to each line, with his expression following the mood of the line.</dd>
+          <dt>Your task</dt><dd>Agree a defensible shortlist: skills-first criteria applied the same way to everyone, fair consideration of local candidates under the Fair Consideration Framework and the Tripartite Guidelines, and a clear line on what the AI screening score can and cannot be relied on for.</dd>
+          <dt>Time</dt><dd>10 to 15 minutes in the live version; 4 to 6 minutes in guided practice.</dd>
+          <dt>Strategic Enterprise lens</dt><dd>Trust and fairness: criteria that candidates and managers can trust. Structure: who decides, and on what evidence.</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h2>What good looks like</h2>
+        <p class="muted small">Feedback is scored against these three IHRP performance statements. The plain-English line is what the facilitator and the assessor look for; the text underneath is the statement as IHRP words it.</p>
+        <div id="statements" style="display:grid;gap:10px"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2>Evidence pack</h2>
+      <p class="muted small">The same pack every learner gets. Weighted matrix built in the Unit 1 AI lab from the Skills Framework for Logistics; pass bar for interview is a weighted score of 3.5 or more. The AI screening score is the vendor tool's resume-to-job-description match, shown for comparison. All four candidates are Singapore-based.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Candidate</th><th>Background</th><th class="num">Planning experience (30%)</th><th class="num">S&amp;OP work sample (35%)</th><th class="num">Planning systems (20%)</th><th class="num">Stakeholder communication (15%)</th><th class="num">Weighted score</th><th class="num">AI screening match</th></tr></thead>
+          <tbody>
+            <tr><td><b>Nurul Aisyah</b></td><td>6 yrs planning at a government-linked logistics group; rebuilt the S&amp;OP plan correctly and spotted the planted data error</td><td class="num">4.0</td><td class="num">4.5</td><td class="num">4.0</td><td class="num">4.0</td><td class="num"><b>4.2</b></td><td class="num">71%</td></tr>
+            <tr><td><b>Priya Raman</b></td><td>4 yrs demand planning, FMCG distributor</td><td class="num">3.5</td><td class="num">4.0</td><td class="num">3.5</td><td class="num">4.0</td><td class="num"><b>3.8</b></td><td class="num">78%</td></tr>
+            <tr><td><b>Marcus Tan</b></td><td>5 yrs planning at Daniel's previous employer; did not spot the planted data error</td><td class="num">4.0</td><td class="num">3.0</td><td class="num">4.0</td><td class="num">4.0</td><td class="num"><b>3.7</b></td><td class="num">92%</td></tr>
+            <tr><td><b>Kevin Ong</b></td><td>2 yrs operations support; CV closely mirrors the job advertisement wording</td><td class="num">2.5</td><td class="num">2.5</td><td class="num">3.0</td><td class="num">4.0</td><td class="num"><b>2.8</b></td><td class="num">85%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">About the AI screening tool: it ranks applications by similarity between the CV and the job description. It has not been validated against on-the-job performance at Harbourline, and it weights wording and previous employers. It is useful for a first sort of 80 applications; it is not a basis for ranking final candidates.</p>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2>How you want to practise</h2>
+      <div class="modes" id="modes">
+        <label class="mode sel" data-mode="guided"><input type="radio" name="mode" id="mode-guided" value="guided" checked><span><b>Guided practice (video)</b><br><span class="small muted">Daniel speaks to you on screen, lip-synced, with his expression changing with the turn; you choose one of three responses and he reacts. Pre-rendered by the scenario engine, so it runs anywhere, including inside Canvas, with captions on.</span></span></label>
+        <label class="mode" data-mode="live" id="mode-live-card"><input type="radio" name="mode" id="mode-live" value="live"><span><b>Live AI counterpart (video)</b><br><span class="small muted" id="live-note">You answer in your own words; a simulated Daniel speaks back and holds his position until you show the behaviour. In this demonstration his replies are voiced by your device while he listens on screen; in production the engine lip-syncs each reply. Scored against the same three statements.</span></span></label>
+      </div>
+      <div class="note small">Rules that apply in every mode: fictional people and data only; practise as many times as you like; every attempt is kept in your scenario record, and your best attempt counts; a facilitator, not the software, validates your attainment. Sound: Daniel speaks aloud and every line is captioned.</div>
+      <div class="btnrow">
+        <button class="btn primary" id="btn-start">Start attempt</button>
+        <span class="small muted" id="start-hint"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONVERSATION -->
+  <div id="p-convo" hidden>
+    <div class="convo">
+      <div class="card">
+        <div class="btnrow" style="justify-content:space-between">
+          <h2>Meeting Room 3B, Harbourline Logistics</h2>
+          <span class="pill accent" id="convo-mode">Guided practice</span>
+        </div>
+        <div class="vstage" id="vstage">
+          <video id="vid" playsinline preload="auto"></video>
+          <span class="vbadge" id="vbadge">Daniel Lim</span>
+          <div class="cap" id="cap"><span class="who">Daniel Lim · Head of Operations Planning</span><span id="captext"></span></div>
+        </div>
+        <div class="stagectl">
+          <button class="btn quiet" id="btn-replay">Replay Daniel</button>
+          <button class="btn quiet" id="btn-skip">Show responses now</button>
+          <span id="stage-state"></span>
+        </div>
+        <div class="said" id="said" hidden><div class="who">You · HR business partner</div><div id="saidtext"></div></div>
+        <div id="guided-ui">
+          <p class="small muted" style="margin-bottom:8px" id="turn-label"></p>
+          <div class="options" id="options"></div>
+        </div>
+        <div id="live-ui" hidden>
+          <div class="chatbox">
+            <textarea id="live-input" rows="3" placeholder="Say what you would say to Daniel. (Fictional case only; no real names or data.)"></textarea>
+            <div class="btnrow">
+              <button class="btn primary" id="live-send">Send</button>
+              <button class="btn" id="live-speak" disabled title="Spoken answers (push to talk, with a transcript you confirm before sending) are part of the production engine. In this demonstration, type your answer.">Speak your answer</button>
+              <button class="btn" id="live-stop" hidden>Stop</button>
+              <button class="btn" id="live-end">End conversation and get feedback</button>
+              <span class="small muted" id="live-status"></span>
+            </div>
+          </div>
+        </div>
+        <details><summary>Transcript so far</summary><div class="tr" id="transcript" style="margin-top:8px"></div></details>
+      </div>
+      <aside class="side">
+        <div class="card">
+          <div class="eyebrow muted">Attempt</div>
+          <div class="mono" id="attempt-id"></div>
+          <div class="timer" id="timer">00:00</div>
+          <p class="small muted">Target 10 to 15 minutes in the live version.</p>
+        </div>
+        <div class="card" id="meter-card">
+          <div class="eyebrow muted">Daniel's resistance</div>
+          <div class="meter"><i id="meter" style="width:100%"></i></div>
+          <p class="small muted">Falls when you use criteria, evidence and a clear line on the AI tool. Rises when you give ground.</p>
+        </div>
+        <div class="card">
+          <div class="eyebrow muted">Statements in play</div>
+          <ul class="small">
+            <li>Identify Skills and Apply Objective Shortlisting</li>
+            <li>Apply Skills-Based Decision Making</li>
+            <li>Tool Selection and Application</li>
+          </ul>
+          <button class="btn quiet small" id="btn-abandon">Abandon attempt</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div id="p-feedback" hidden>
+    <div id="fb-banner" class="banner"></div>
+    <div class="grid3" style="margin-top:16px" id="fb-cards"></div>
+    <div class="card" style="margin-top:16px" id="fb-turns-card">
+      <h3>Turn by turn</h3>
+      <div class="fb" id="fb-turns"></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>Learning from this attempt</h3>
+      <p class="small muted">One line, in your own words. It is saved with this attempt in your scenario record and shown to you at the start of your next attempt. The facilitator reads it when validating.</p>
+      <input type="text" id="learn-note" placeholder="Next time I will…">
+      <div class="btnrow">
+        <button class="btn" id="btn-save-note">Save note</button>
+        <button class="btn primary" id="btn-again">Try again</button>
+        <button class="btn" id="btn-to-reflect">Write my reflection</button>
+        <button class="btn quiet" id="btn-to-record">View scenario record</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFLECTION -->
+  <div id="p-reflect" hidden>
+    <div class="card">
+      <h2>Self-reflection: C1-S1</h2>
+      <p class="muted small">Submitted once per scenario, after your best attempt. 150 to 250 words in total. The facilitator validates your attainment by reading this together with your scenario record. In Canvas this is the assignment "C1-S1 Self-reflection" (text entry).</p>
+      <div id="reflect-form" style="display:grid;gap:14px">
+        <label><b id="rq1">1. Compare your attempts. What did you do differently in your best attempt, and what difference did it make to how Daniel responded?</b><textarea id="r1" rows="4"></textarea><span class="small muted" id="r1c">0 words</span></label>
+        <label><b>2. Which of the three performance statements was hardest for you, and why? (Objective shortlisting · Skills-based decision · What the AI tool can be relied on for)</b><textarea id="r2" rows="4"></textarea><span class="small muted" id="r2c">0 words</span></label>
+        <label><b>3. Name one shortlisting conversation or process at your workplace where you will apply this, and what you will do first.</b><textarea id="r3" rows="4"></textarea><span class="small muted" id="r3c">0 words</span></label>
+        <label class="small"><input type="checkbox" id="r-decl"> This reflection is my own work and contains no real employee or candidate data.</label>
+        <div class="btnrow">
+          <button class="btn primary" id="btn-submit-reflect">Submit reflection</button>
+          <span class="small muted" id="reflect-hint"></span>
+        </div>
+      </div>
+      <div id="reflect-done" hidden></div>
+    </div>
+  </div>
+
+  <!-- RECORD -->
+  <div id="p-record" hidden>
+    <div class="card">
+      <div class="btnrow" style="justify-content:space-between">
+        <h2>Scenario record: C1-S1</h2>
+        <span id="rec-status"></span>
+      </div>
+      <p class="muted small">One record per learner per scenario. Every attempt stays on it, including the ones that did not reach the bar, so the learning path is visible. The best attempt is what the facilitator validates and what the Oral Questioning assessor sees.</p>
+      <dl class="kv" id="rec-head"></dl>
+      <div class="tablewrap"><table id="rec-table"><thead><tr><th>Attempt</th><th>When</th><th>Mode</th><th class="num">Duration</th><th>Objective shortlisting</th><th>Skills-based decision</th><th>AI tool</th><th>Outcome</th><th>Learner's note</th></tr></thead><tbody></tbody></table></div>
+      <div id="rec-reflection"></div>
+      <div class="btnrow">
+        <button class="btn primary" id="btn-record-again">Start another attempt</button>
+        <button class="btn" id="btn-record-facilitator">Open the facilitator view</button>
+        <button class="btn quiet" id="btn-reset">Reset this demo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ENGINE ================= -->
+<section class="view" id="view-engine" hidden>
+  <div class="card">
+    <h2>The scenario engine</h2>
+    <p class="lead">Every scenario in the bank is a data file the engine runs. The engine turns it into a conversation with a counterpart who speaks on screen, scores what the learner says against the IHRP performance statements, keeps the scenario record and hands attainment to Canvas. The same definition runs in three ways: pre-rendered video (guided practice), live video (AI counterpart) and facilitator-led from the printed brief.</p>
+    <div class="flow" aria-label="Scenario engine components">
+      <div class="box eng"><b>1. Scenario definition</b><span class="w">Brief, counterpart, statements, evidence pack, guided turns, live-counterpart rules, scoring rubric, clip manifest. Authored by CET Global's subject-matter experts; one file per scenario.</span></div>
+      <div class="box eng"><b>2. Dialogue manager</b><span class="w">Guided: a branching state machine (Daniel's reaction depends on the choice; resistance rises or falls). Live: a language model plays Daniel from the counterpart brief and behaviour rules, one reply at a time.</span></div>
+      <div class="box eng"><b>3. Speech and avatar</b><span class="w">A commercial avatar video service (HeyGen Avatar IV in this demonstration) turns each line into video: its neural voice speaks the line, and a photo-to-video model animates Daniel's portrait with lips, face, head, shoulders and hands moving together; the mood sets the portrait variant, the expressiveness level and a short motion prompt. Scripted lines are pre-rendered clips; live replies use the same service's streaming avatar.</span></div>
+      <div class="box eng"><b>4. Learner input</b><span class="w">Choice (guided), typed, or spoken with push-to-talk and a transcript the learner confirms before sending. Microphone and camera are never on without the learner pressing the button.</span></div>
+      <div class="box eng"><b>5. Scoring</b><span class="w">Rubric mapped one-to-one to the IHRP statements. Guided: rule-based from the choices. Live: model-assisted, with the evidence quoted so the facilitator can check it.</span></div>
+      <div class="box canvas"><b>6. Record and Canvas</b><span class="w">Attempts, notes, best attempt and reflection status in the scenario record; attainment written back to the Canvas gradebook; facilitator validates in SpeedGrader.</span></div>
+    </div>
+    <div class="legend"><span><i style="background:var(--surface);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)"></i>Scenario engine (training provider)</span><span><i style="background:var(--surface);border-color:var(--navy);box-shadow:inset 0 0 0 1px var(--navy)"></i>Inside Canvas</span></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>How the video is made</h3>
+      <ol class="steps">
+        <li><strong>Portrait</strong>A photoreal portrait of Daniel is generated as a fictional person (no real individual): a Singaporean Chinese man in his mid-40s, light blue shirt, lanyard and staff pass, in a Singapore meeting room. Four expression variants of the same person: neutral, stern, pleased, warm. SIM signs off the likeness before the full bank is rendered.</li>
+        <li><strong>Line and speech</strong>Each of Daniel's scripted lines (17 for C1-S1) is sent to the avatar service with a voice: here a direct, reassuring male English voice from the service's library at normal speed. There is no stock Singapore English voice; production uses a voice clone recorded by a consenting Singaporean speaker, which the same service supports.</li>
+        <li><strong>Mood</strong>The scenario definition gives each line a mood. It picks the portrait variant (impatient → stern, pleased → smile, warm → warm, thoughtful and listening → neutral), the expressiveness level (low for thoughtful and listening, medium otherwise) and a short motion prompt, for example "brisk delivery, slight frown, firm small head movements, one quick open-hand gesture" for an impatient line.</li>
+        <li><strong>Photo-to-video model</strong>The service's photo-to-video avatar model animates the whole portrait from the speech and the motion prompt: lip-sync, facial expression, eye contact and blinks, head and shoulder movement and hand gestures, all in one pass, at 1080p. The meeting-room background moves naturally with the camera framing.</li>
+        <li><strong>Clip</strong>The 1080p render is fetched through the service's API, the staff pass is blurred, and the clip is downscaled to 960×540 as H.264 (plus a WebM copy) so the whole set is 16 MB, served next to the scenario and cached by the browser. The 17 lines and the listening loop (2 min 13 s of video) rendered in about 20 minutes and used about US$7 of API credit, roughly US$3 per finished minute.</li>
+        <li><strong>Live replies</strong>Production uses the same service's streaming avatar for the live counterpart: the dialogue model's reply is spoken by Daniel within a second or two of the learner sending, while the listening loop covers the thinking time. This demonstration shows the listening loop and voices the reply from the viewer's device.</li>
+      </ol>
+    </div>
+  </div>
+
+    <div class="card">
+      <h3>Demonstration and production</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Part</th><th>In this demonstration</th><th>In production (Canvas)</th></tr></thead>
+          <tbody>
+            <tr><td>Daniel's scripted lines</td><td>17 pre-rendered video clips with sound and captions</td><td>The same clips, served by the scenario service</td></tr>
+            <tr><td>Live counterpart</td><td>Daniel's listening loop on screen; the reply is voiced by the viewer's own device (quality varies) and captioned; replies from the viewer's Claude access after consent</td><td>Scenario engine with its own dialogue model, a cloned Singapore English voice and the avatar service's streaming avatar speaking each reply; no learner account with a public AI tool</td></tr>
+            <tr><td>Learner's answer</td><td>Choice or typed</td><td>Choice, typed or spoken (push to talk; transcript confirmed before sending)</td></tr>
+            <tr><td>Scoring</td><td>Rule-based (guided); model-assisted with quoted evidence (live)</td><td>Same, with facilitator override and second-assessor sampling</td></tr>
+            <tr><td>Record</td><td>Kept in this browser only; "Reset this demo" clears it</td><td>Scenario service; summary written to the Canvas gradebook through the external-tool link</td></tr>
+            <tr><td>Captions and transcript</td><td>Always on</td><td>Always on; transcript downloadable by the learner</td></tr>
+            <tr><td>Accessibility</td><td>Keyboard operable; captions; no microphone needed</td><td>Plus facilitator-led route from the same brief, with no disadvantage</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">Cost and time to confirm with SIM: pre-rendering the whole bank (15 scenarios, about 45 minutes of counterpart video) is a one-off of roughly US$150 of avatar credit and costs nothing per attempt afterwards; a 15-minute live attempt is metered per avatar-minute by the streaming service (from about US$0.01 to US$0.10 a minute depending on plan and volume) plus the dialogue model. A second counterpart (for example a sceptical team lead for C1-S4) needs a new portrait set and about half a day to voice, prompt and render its lines.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Scenario definition: C1-S1 (as the engine reads it)</h3>
+    <p class="small muted">Generated from the data this page runs on. The scenario bank in the proposal (Section 3.5) is a set of these files. Clip IDs point to the pre-rendered video; "pts" are the points each choice earns against a statement; thresholds set Met / Partly for each statement.</p>
+    <details open><summary>Show the definition</summary><pre id="scendef"></pre></details>
+  </div>
+</section>
+
+<!-- ================= GUIDE ================= -->
+<section class="view" id="view-guide" hidden>
+  <div class="card">
+    <h2>Learner guide: scenario-based role play in Canvas</h2>
+    <p class="lead">You will find the scenarios inside your SIM Academy Canvas course, in the module for each unit. Each scenario is a short conversation with a realistic counterpart who speaks to you on screen. You can practise it as often as you like. Your best attempt counts, and your facilitator validates it.</p>
+  </div>
+  <div class="grid3">
+    <div class="card">
+      <h3>Access</h3>
+      <ol class="steps">
+        <li><strong>Sign in to Canvas</strong>Use your SIM Academy learner account on a laptop or tablet (Chrome or Edge). Use earphones in a shared office; a headset if you want to speak your answers.</li>
+        <li><strong>Open the course</strong>"AI for HR Programme: Workplace Fairness and Inclusivity with AI".</li>
+        <li><strong>Go to Modules</strong>Open <span class="mono">Unit 1 · Skills-first shortlisting</span> and click <span class="mono">Scenario C1-S1: The shortlist challenge</span>.</li>
+        <li><strong>Click Open scenario</strong>It opens inside Canvas. No second login: Canvas tells the scenario who you are.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Complete</h3>
+      <ol class="steps" style="counter-reset:s 4">
+        <li><strong>Read the brief and the evidence pack</strong>Two minutes: the situation, your role, what good looks like, the matrix scores.</li>
+        <li><strong>Start attempt</strong>Choose guided practice or the live AI counterpart. Daniel speaks; captions are always on. Answer by choosing, typing, or (live version) pressing Speak and confirming the transcript. 10 to 15 minutes.</li>
+        <li><strong>End the conversation</strong>Read your feedback against the three performance statements, and the strong move for any turn that fell short.</li>
+        <li><strong>Not attained? Try again</strong>Write one line on what you will do differently, then start again. Every attempt is kept; your best one counts.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Record your reflection</h3>
+      <ol class="steps" style="counter-reset:s 8">
+        <li><strong>Open "C1-S1 Self-reflection"</strong>The Canvas assignment next to the scenario. Answer the three prompts (150 to 250 words in total).</li>
+        <li><strong>Tick the declaration and submit</strong>Your own work; no real employee or candidate data. Status becomes "Submitted, awaiting validation".</li>
+        <li><strong>Facilitator validates</strong>Your facilitator reads your scenario record and reflection, then marks the scenario Validated, or returns it with a comment and asks for one more attempt.</li>
+        <li><strong>Recorded as evidence</strong>A validated scenario goes into your course evidence record (E1 for Unit 1). The Oral Questioning assessor sees it and confirms it; you are not assessed on it again.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Practising more than once</h3>
+      <ul>
+        <li><b>Unlimited attempts</b>, during the course and up to the day of your booked assessment. There is no penalty for a failed attempt; it stays on your record as part of the learning path.</li>
+        <li><b>Feedback after every attempt</b>, in the same language the assessor uses. For each turn that fell short you see the strong move, so the next attempt starts from what you learned.</li>
+        <li><b>Daniel varies.</b> His opening and his objections rotate between attempts (and the live AI version never repeats itself), so repeating the scenario is practice, not memorising a script.</li>
+        <li><b>Your note carries forward.</b> The line you wrote after your last attempt is shown to you at the start of the next one.</li>
+        <li><b>Your best attempt counts.</b> Attainment is recorded when an attempt meets all three statements. Validation needs your submitted reflection as well.</li>
+        <li><b>Before the assessment</b>, practise the scenario you found hardest once more in the week before your booked Oral Questioning slot.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>What counts, and who decides</h3>
+      <ul>
+        <li><b>The software scores practice.</b> A person makes every decision. Your facilitator validates attainment; the ACTA/ACLP certified assessor confirms it in the Oral Questioning assessment.</li>
+        <li><b>Validated means:</b> an attempt that met all three statements, plus a reflection that names what changed between attempts, links it to a statement in your words, and states one workplace application.</li>
+        <li><b>Nothing real goes in.</b> All names, scores and documents are fictional. Do not type or say real employee or candidate details in any scenario.</li>
+        <li><b>If you cannot use a browser-based scenario</b> (device, access, disability, language), your facilitator runs the same scenario with you live, from the same brief, with no disadvantage.</li>
+        <li><b>Help:</b> the facilitator in class; between sessions, the course inbox in Canvas.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FACILITATOR ================= -->
+<section class="view" id="view-facilitator" hidden>
+  <div class="card">
+    <h2>Facilitator view: validating C1-S1</h2>
+    <p class="lead">What the facilitator (and later the assessor) sees for one learner, and the three checks that turn a scenario record into validated evidence. In Canvas this is done in SpeedGrader on the "C1-S1 Self-reflection" assignment, with the scenario record opened alongside.</p>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>This learner's record</h3>
+      <div id="fac-record"></div>
+    </div>
+    <div class="card">
+      <h3>Validation</h3>
+      <div id="fac-reflection"></div>
+      <div id="fac-checks" style="display:grid;gap:8px;margin-top:10px">
+        <label class="small"><input type="checkbox" id="fc1"> The best attempt met all three performance statements (scenario record).</label>
+        <label class="small"><input type="checkbox" id="fc2"> The reflection names what the learner did differently, and links it to a statement in the learner's own words.</label>
+        <label class="small"><input type="checkbox" id="fc3"> The reflection states one concrete workplace application.</label>
+      </div>
+      <textarea id="fac-comment" rows="2" placeholder="Comment to the learner (required if returning)"></textarea>
+      <div class="btnrow">
+        <button class="btn primary" id="btn-validate">Validate and record in E1</button>
+        <button class="btn" id="btn-return">Return for one more attempt</button>
+        <span class="small muted" id="fac-hint"></span>
+      </div>
+      <div id="fac-outcome"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Cohort snapshot (illustrative)</h3>
+    <p class="small muted">Example data for a class of 20, as the facilitator dashboard would show it on the evening of Day 1. Used to decide who gets coaching time in the Day-1 practice slot and who to pair for the second attempt.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Status</th><th class="num">Learners</th><th>Facilitator action</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill good">Attained · validated</span></td><td class="num">7</td><td>None. Recorded in E1; assessor will confirm in the Oral Questioning assessment.</td></tr>
+          <tr><td><span class="pill accent">Attained · reflection pending</span></td><td class="num">6</td><td>Reminder in class to submit the reflection before Day 2.</td></tr>
+          <tr><td><span class="pill warn">Attempts, not yet attained</span></td><td class="num">5</td><td>Check the pattern: four of the five fell short on the AI tool statement. Ten-minute recap on what the screening score measures, then a paired second attempt.</td></tr>
+          <tr><td><span class="pill bad">Not started</span></td><td class="num">2</td><td>Device or access problem? Offer a loan device or run the scenario facilitator-led in the practice slot.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4 style="margin-top:14px">Hand-off to the assessor</h4>
+    <p class="small">Before the booked assessment the assessor receives each learner's course evidence record, including validated scenarios with the attempt summary and reflection. In the Oral Questioning assessment the assessor confirms the statements already evidenced and spends the time on what is not yet evidenced. Scenario records and reflections are kept for moderation (second-assessor sampling of 10% per cohort) for the period agreed with SIM, then deleted.</p>
+  </div>
+</section>
+
+<!-- ================= HOSTING ================= -->
+<section class="view" id="view-hosting" hidden>
+  <div class="card">
+    <h2>Hosting and access through SIM Academy's Canvas LMS</h2>
+    <p class="lead">Learners never leave Canvas. The scenario runs as a tool inside the course module; attempts, feedback and the scenario record live in the scenario service; the reflection is a Canvas assignment; attainment flows back into the Canvas gradebook and, from there, into the course evidence record.</p>
+    <div class="flow" aria-label="Flow from Canvas to the course evidence record">
+      <div class="box canvas"><b>1. Canvas course</b><span class="w">SIM learner account, single sign-on. Course "AI for HR Programme: Course 1".</span></div>
+      <div class="box canvas"><b>2. Module item</b><span class="w">Unit 1 module: "Scenario C1-S1" (external tool) and "C1-S1 Self-reflection" (assignment).</span></div>
+      <div class="box"><b>3. Scenario engine</b><span class="w">Brief, video conversation (guided or live AI), feedback, repeat attempts. Launched from Canvas with the learner's identity.</span></div>
+      <div class="box"><b>4. Scenario record</b><span class="w">Every attempt, per statement, with the learner's note. Kept in the scenario service; summary written back to Canvas.</span></div>
+      <div class="box canvas"><b>5. Reflection &amp; SpeedGrader</b><span class="w">Learner submits the reflection in Canvas; facilitator validates with the record open alongside.</span></div>
+      <div class="box"><b>6. Course evidence record</b><span class="w">Validated scenario recorded in E1; assessor confirms in the Oral Questioning assessment.</span></div>
+    </div>
+    <div class="legend"><span><i style="background:var(--surface);border-color:var(--navy);box-shadow:inset 0 0 0 1px var(--navy)"></i>Inside Canvas</span><span><i style="background:var(--surface)"></i>Scenario engine (training provider) and course records</span></div>
+  </div>
+
+  <div class="card">
+    <h3>Three ways to make the scenarios available</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Option</th><th>How it works</th><th>What SIM does</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>A. Canvas external tool (LTI 1.3)</b><br><span class="pill good">Recommended</span></td>
+            <td>The scenario engine is registered once in SIM's Canvas as an external tool. Each scenario is added to its unit module as an assignment with submission type "External Tool". The launch carries the learner's Canvas identity and course role, so there is no second login; attainment (complete / incomplete) and the attempt count are written back to the gradebook automatically. Unlimited attempts are the tool's own setting.</td>
+            <td>Canvas administrator installs the tool (developer key and placement) and adds the module items from a template; sets the module requirement "must mark as done" or "must submit" if a sequence is wanted.</td>
+            <td>All runs once the pilot is done. Cleanest learner experience; audit trail in both systems.</td>
+          </tr>
+          <tr>
+            <td><b>B. Canvas page with an embedded scenario</b></td>
+            <td>A Canvas page in the unit module embeds the scenario (or links to it). The learner enters their SIM learner ID on first use. The reflection is a Canvas assignment as in A. Attainment is entered in the gradebook by the facilitator from the scenario service's cohort export.</td>
+            <td>Course designer adds the page and the assignment; Canvas administrator allows the scenario domain for embedding if the account restricts it.</td>
+            <td>The pilot cohort, or if LTI installation is not approved in time.</td>
+          </tr>
+          <tr>
+            <td><b>C. Facilitator-led from the same brief</b></td>
+            <td>No technology. The facilitator (or a briefed peer) plays Daniel from the scenario brief; the facilitator records the attempt on the same scenario record form (per statement) and the learner submits the same reflection in Canvas.</td>
+            <td>Nothing beyond the Canvas assignment.</td>
+            <td>Learners without device or browser access, accessibility needs, or any cohort while access is being set up.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted">The same scenario bank, statements, feedback language, record and reflection are used in all three options, so a cohort can mix them without changing the course or the evidence.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Canvas set-up for one scenario</h3>
+      <ol class="steps">
+        <li><strong>Module</strong>In the Course 1 Canvas course, module <span class="mono">Unit 1 · Skills-first shortlisting</span>.</li>
+        <li><strong>Item 1: Scenario C1-S1</strong>Assignment, submission type External Tool (option A) or a Page (option B). Points: 0 or complete/incomplete. Attempts: unlimited. Available from Day 1 morning until the booked assessment day.</li>
+        <li><strong>Item 2: C1-S1 Self-reflection</strong>Assignment, text entry, 150 to 250 words, three prompts in the description, declaration line. Grading: complete / incomplete. Rubric with the three validation checks so the decision is visible to the learner.</li>
+        <li><strong>Gradebook columns</strong>"C1-S1 attainment" (written back by the tool or entered by the facilitator) and "C1-S1 reflection" (validated / returned). Together they are the evidence pointer for E1.</li>
+        <li><strong>Notifications</strong>Canvas announcement at the end of Day 1: "Submit your C1-S1 reflection before Day 2." Returned reflections notify the learner through Canvas.</li>
+        <li><strong>Mobile and sound</strong>Works in the Canvas Student app and in a browser. The video clips are small (3 MB for the scenario) and captioned, so they play on office networks and with the sound off.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>What the scenario record holds</h3>
+      <div class="tablewrap">
+        <table>
+          <tbody>
+            <tr><td class="mono">learner</td><td>SIM learner ID (pseudonymised in exports)</td></tr>
+            <tr><td class="mono">scenario</td><td>C1-S1, with the three statement IDs it carries</td></tr>
+            <tr><td class="mono">attempt</td><td>Number, start and end time, mode (guided / live AI / facilitator-led), duration</td></tr>
+            <tr><td class="mono">per statement</td><td>Met / Partly / Not yet, with the evidence line (which turn, or the quoted words in the live version)</td></tr>
+            <tr><td class="mono">outcome</td><td>Attained · Nearly there · Practise again</td></tr>
+            <tr><td class="mono">learner's note</td><td>"Next time I will…", one line per attempt</td></tr>
+            <tr><td class="mono">best attempt</td><td>The attempt used for validation</td></tr>
+            <tr><td class="mono">reflection</td><td>Submitted (when), validated or returned (by whom, when, comment)</td></tr>
+            <tr><td class="mono">evidence link</td><td>Course evidence record entry (E1 · Unit 1 role play observation)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">The live version also keeps the transcript (and, with the learner's consent, the audio of their answers) for the learner's own review and for moderation sampling, for the agreed period only.</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Data protection and responsible use</h3>
+      <ul>
+        <li>Fictional organisation, people and data in every scenario. Learners are told not to enter or say real employee or candidate details, and the declaration on the reflection repeats it.</li>
+        <li>Learners are told up front that software scores practice conversations and that a person makes every validation and assessment decision.</li>
+        <li>The microphone is used only while the learner holds the Speak button, and the camera is never used. Learner identifiers are pseudonymised in any export that leaves Canvas or the scenario service. Transcripts and records are kept for the moderation period agreed with SIM, then deleted (PDPA).</li>
+        <li>The live counterpart runs on the scenario engine's own dialogue model and voice; no learner account with a public AI tool is needed, and nothing a learner says is used to train any model.</li>
+        <li>Second-assessor sampling of validated records (10% per cohort) and an appeal route through SIM.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Before the first cohort</h3>
+      <ol class="steps">
+        <li><strong>Pilot in Canvas</strong>Three SIM staff run C1-S1 end to end (launch, attempts, reflection, validation) on the SIM network and on a locked-down work laptop.</li>
+        <li><strong>Network and sound check</strong>SIM confirms the scenario domain is reachable on the SIM network and in the training rooms, and that video with sound plays on the training-room devices.</li>
+        <li><strong>Facilitator briefing</strong>Half-day: the unit loop, the scenario bank, the record, the three validation checks, SpeedGrader, moderation.</li>
+        <li><strong>Pre-course readiness check</strong>One week before Day 1, learners open a five-minute check page in Canvas (scenario opens; sound works; Speak button works if they want to use it). Anyone who fails is offered a loan device or the facilitator-led route.</li>
+        <li><strong>Agree retention</strong>SIM and CET Global agree how long records, transcripts and any audio are kept and who may see them.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note small">About this page: it is a working demonstration, not the production service. It keeps your attempts in this browser only, so each person who opens it sees their own fresh record. In the Canvas deployment the record is kept by the scenario service and the summary is written to the gradebook. The live counterpart here uses the Claude access of whoever is viewing the page and the voice on their device, with Daniel listening on screen; in production the engine supplies the dialogue, the voice and the lip-synced video.</div>
+</section>
+
+</main>
+<footer class="wrap">CET Global Pte Ltd for SIM Academy · AI for HR Programme · Scenario-based role play demonstration · 25 October 2026 · Fictional data throughout. Daniel Lim and Harbourline Logistics are fictional; Daniel's likeness is AI-generated and depicts no real person.</footer>
+
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const KEY="c1s1-demo-v3";
+
+/* ---------- scenario definition ---------- */
+const STATEMENTS=[
+ {id:"S1",short:"Objective shortlisting",badge:"Workplace Fairness and Inclusivity L1 · Fair Hiring",name:"Identify Skills and Apply Objective Shortlisting",
+  plain:"Shortlist on job-related skills, with the same criteria applied to every candidate, and give local candidates fair consideration.",
+  verbatim:"Adopt skills-first approach in consistent and competency-based shortlisting criteria (eg. work samples, portfolios, qualifications, and experience). Ensure fair consideration of local workforce and evaluation for all candidates.",
+  met:5,partly:3},
+ {id:"S2",short:"Skills-based decision",badge:"Workplace Fairness and Inclusivity L1 · Fair Hiring",name:"Apply Skills-Based Decision Making",
+  plain:"Decide on skills, experience and ability to do the job. Set aside reasons that are not job requirements, such as \"culture fit\" or where someone used to work.",
+  verbatim:"Apply TGFEP and skills-based selection principles to prevent discrimination by focusing on skills, experience, and job performance ability.",
+  met:4,partly:2},
+ {id:"S3",short:"AI tool",badge:"AI Fluency in HR",name:"Tool Selection and Application",
+  plain:"Explain what the AI screening tool measures, what it can and cannot be relied on for, and use it accordingly.",
+  verbatim:"Define a set of metrics to evaluate and select appropriate AI tools that meet the requirements of the identified HR specialisation (e.g. review tool suitability in terms of current functionality, future update roadmap and tool maintenance, privacy, organisation readiness and outcome effectiveness).",
+  met:2,partly:1}
+];
+const LINES={
+ op1:"I've got five minutes before the Tuas ops call. The AI tool scored Marcus 92%. He's a culture fit; he worked with me at my old firm. Nurul's at 71%. Let's send Marcus and one other through to interview and move on.",
+ op2:"Right, HR. I've seen the AI ranking. Marcus is top at 92%, he's a culture fit, I've worked with him before. The local candidate, Nurul, is at 71%. Shortlist Marcus plus one and let's close this out this week.",
+ t1a:"Fine, but don't turn this into a bureaucracy. What's wrong with the AI score? It has done that work already.",
+ t1b:"Fit matters. My team runs on trust. Marcus I know; Nurul I don't. And the AI agrees with me: 92 against 71.",
+ t1c:"Good. Put Kevin as the second; he came across well when he met the team at Tuas. The AI has him at 85% anyway.",
+ t2a:"So what does your matrix say, then? And look, Nurul's CV is fine, but she's been at a government-linked company. She'll be slow. Marcus knows how we work.",
+ t2b:"One input, fine. But it's the most objective one we have; a machine doesn't play favourites. And Nurul's been at a government-linked company. She'll be slow. Marcus knows how we work.",
+ t2c:"Exactly. And Nurul's been at a government-linked company; she'll be slow. Marcus knows how we work. So we're done?",
+ t3a:"Hm. I didn't know she caught the data error. Still, Marcus will hit the ground running. Look, can't we just put Marcus through and say the others didn't meet the bar? Who's going to check?",
+ t3b:"Fine, show me the scores. But honestly, can't we just put Marcus through and say the others didn't meet the bar? Who's going to check?",
+ t3c:"Good, that's all I'm asking. So we put Marcus through and say the others didn't meet the bar. Who's going to check?",
+ t4a:"Three, then. But I want the interviews scored properly; I'm not doing this by feel. So what happens next?",
+ t4b:"Alright. Who meets the bar? And what happens next?",
+ t4c:"I am. Marcus and Kevin. So what happens next?",
+ t5a:"Fine. Send me the note and the interview slots. And tell the talent team I want to see that validation.",
+ t5b:"Do that.",
+ t5c:"Good. Thanks."
+};
+const MOOD={op1:"impatient",op2:"impatient",t1a:"impatient",t1b:"impatient",t1c:"pleased",t2a:"thoughtful",t2b:"impatient",t2c:"pleased",t3a:"thoughtful",t3b:"impatient",t3c:"pleased",t4a:"thoughtful",t4b:"idle",t4c:"pleased",t5a:"warm",t5b:"idle",t5c:"pleased"};
+const OPENERS=["op1","op2"];
+const TURNS=[
+ {label:"Daniel opens by asking you to shortlist Marcus on culture fit and the AI score.",options:[
+   {q:"strong",pts:{S1:2,S2:1},clip:"t1a",text:"Before we shortlist, let's agree the criteria. For this Operations Planner role the matrix we set says: planning experience, the S&OP work sample, planning-systems skills and stakeholder communication, weighted. Every candidate is scored the same way; then we see who is through.",tip:""},
+   {q:"partial",pts:{S2:1},clip:"t1b",text:"Culture fit isn't something we can shortlist on; it isn't a job requirement. What do you actually need this person to do well?",tip:"Good challenge, but it leaves the criteria to Daniel. The strong move names the agreed criteria and that everyone is scored against them."},
+   {q:"weak",pts:{},clip:"t1c",text:"Okay, Marcus and one more. Who's your second choice?",tip:"You accepted a shortlist built on \"culture fit\" and an unvalidated score. The strong move restates the agreed, job-related criteria before any names are discussed."}
+ ]},
+ {label:"Daniel leans on the AI screening score.",options:[
+   {q:"strong",pts:{S3:2},clip:"t2a",text:"The tool's score is a similarity match between the CV and the job description. It is useful for sorting 80 applications into a first pass. It hasn't been validated against performance here, and it gives weight to wording and to previous employers, which is where Marcus's 92% comes from. We shouldn't rely on it to rank final candidates; the matrix does that.",tip:""},
+   {q:"partial",pts:{S3:1},clip:"t2b",text:"The AI score is one input, not the decision. Let's look at the matrix scores alongside it.",tip:"Right direction, but Daniel is left believing the score is objective. The strong move says what the score measures (CV-to-advert similarity), what it has not been checked against (performance), and what it is and is not used for."},
+   {q:"weak",pts:{},clip:"t2c",text:"If the AI scored him 92%, that's hard to argue with. The vendor says it's accurate.",tip:"The vendor's claim is not evidence. The strong move explains what the score measures and why it cannot rank final candidates."}
+ ]},
+ {label:"Daniel dismisses Nurul on where she has worked.",options:[
+   {q:"strong",pts:{S1:2,S2:2},clip:"t3a",text:"Let's go on the evidence. On the work sample Nurul scored 4.5 out of 5: she rebuilt the S&OP plan correctly and spotted the data error we planted. Marcus scored 3 and didn't spot it. On systems skills they are level. \"She'll be slow\" is an assumption about her employer, not evidence about her, and we can't set a qualified local candidate aside on that.",tip:""},
+   {q:"partial",pts:{S1:1,S2:1},clip:"t3b",text:"We can't use where she has worked as a reason. Let's compare the two on the work-sample scores.",tip:"Correct principle, but you did not put the evidence on the table. The strong move quotes the work-sample result and names the assumption for what it is."},
+   {q:"weak",pts:{},clip:"t3c",text:"I see your point about pace. Maybe we note it as a risk and still interview Marcus first.",tip:"\"Pace\" here is an assumption about an employer type, not a job-related finding. Recording it as a risk makes it part of the decision. The strong move returns to the scored evidence."}
+ ]},
+ {label:"Daniel asks whether anyone would notice if Marcus simply went through.",options:[
+   {q:"strong",pts:{S1:1,S2:2},clip:"t4a",text:"We would, and so could MOM. Under the Fair Consideration Framework and the Tripartite Guidelines we consider candidates fairly on merit and keep the record of how we shortlisted. A qualified Singaporean dropped for \"fit\" while a referral goes through is exactly the pattern that gets a company onto the watchlist. So the shortlist is whoever meets the matrix bar. On today's scores that is Nurul, Priya and Marcus: three interviews, same questions, same panel.",tip:""},
+   {q:"partial",pts:{S2:1},clip:"t4b",text:"That wouldn't be fair consideration, and we'd have no defensible record. Let's shortlist on the matrix scores.",tip:"Sound, but Daniel still has to be told the outcome. The strong move names the framework, the record you keep, and the resulting shortlist."},
+   {q:"weak",pts:{},clip:"t4c",text:"I'd rather not, but if you're confident, you're the hiring manager.",tip:"HR owns the process; deferring here gives up the decision. The strong move states the fair-consideration obligation and the shortlist that follows from the scores."}
+ ]},
+ {label:"Daniel asks what happens next.",options:[
+   {q:"strong",pts:{S1:1,S3:1},clip:"t5a",text:"I'll send you the shortlist note today: criteria, weights, each candidate's scores and the reasons. That is our record under the Tripartite Guidelines. The AI screening report stays attached as the first-pass sort, marked as not used for ranking. Interviews next week with the same structured questions, and I'll brief the panel on the scoring guide. I'll also raise with the talent team that the tool's score needs validating before we use it for anything beyond the first sort.",tip:""},
+   {q:"partial",pts:{},clip:"t5b",text:"I'll send you the shortlist and set up the interviews.",tip:"The close is where the record and the tool's proper place are fixed. The strong move names the shortlist note (criteria, scores, reasons), the status of the AI report, and the structured interviews."},
+   {q:"weak",pts:{},clip:"t5c",text:"I'll put Marcus's interview in your diary.",tip:"The shortlist was never agreed on criteria. The strong move closes with the recorded shortlist and consistent interviews."}
+ ]}
+];
+const Q_PTS={strong:-22,partial:-8,weak:8};
+const SECS={"t5a": 6.0, "t3c": 6.7, "t1c": 7.6, "t1a": 6.6, "t3a": 10.4, "t1b": 8.9, "t2c": 7.6, "t4c": 3.6, "t5b": 1.0, "op2": 15.3, "t2a": 9.7, "t3b": 7.4, "t4b": 3.6, "idle": 6.0, "t4a": 6.1, "t5c": 1.5, "t2b": 10.7, "op1": 14.3};
+const EXT=(()=>{ try{ const v=document.createElement("video"); return v.canPlayType('video/mp4; codecs="avc1.4D401E, mp4a.40.2"')?".mp4":".webm"; }catch(e){ return ".mp4"; } })();
+const CLIP=id=>"clips/"+id+EXT;
+
+/* ---------- state ---------- */
+let state=load();
+function load(){ try{ const s=JSON.parse(localStorage.getItem(KEY)||"null"); if(s&&Array.isArray(s.attempts)) return s; }catch(e){} return fresh(); }
+function fresh(){ return {learner:"L-0427",attempts:[],reflection:null,validation:null}; }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+
+/* ---------- helpers ---------- */
+const fmtTime=d=>{ const x=new Date(d); return x.toLocaleDateString("en-SG",{day:"2-digit",month:"short"})+" "+x.toLocaleTimeString("en-SG",{hour:"2-digit",minute:"2-digit",hour12:false}); };
+const fmtDur=s=>{ s=Math.max(0,Math.round(s)); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); };
+const RLABEL={met:"Met",partly:"Partly",notyet:"Not yet"};
+const OUT={attained:["good","Attained"],nearly:["warn","Nearly there"],practise:["bad","Practise again"]};
+function rate(id,pts){ const s=STATEMENTS.find(x=>x.id===id); return pts>=s.met?"met":pts>=s.partly?"partly":"notyet"; }
+function outcomeOf(r){ const v=Object.values(r); if(v.every(x=>x==="met")) return "attained"; if(v.some(x=>x==="notyet")) return "practise"; return "nearly"; }
+function bestAttempt(){ const rank={attained:3,nearly:2,practise:1}; let b=null; for(const a of state.attempts){ if(!b||rank[a.outcome]>rank[b.outcome]) b=a; } return b; }
+function pillFor(outcome){ const [c,t]=OUT[outcome]; return `<span class="pill ${c}">${t}</span>`; }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+function words(s){ return (s.trim().match(/\S+/g)||[]).length; }
+
+/* ---------- views & tabs ---------- */
+const VIEWS=["try","engine","guide","facilitator","hosting"];
+function showView(v){ if(!VIEWS.includes(v)) v="try"; $$(".tab").forEach(t=>t.setAttribute("aria-selected",String(t.dataset.view===v))); VIEWS.forEach(x=>{$("#view-"+x).hidden=(x!==v);}); if(v==="facilitator") renderFacilitator(); if(v==="try") renderStatus(); if(v==="engine") renderEngine(); window.scrollTo({top:0}); }
+$$(".tab").forEach(t=>t.addEventListener("click",()=>{ showView(t.dataset.view); try{history.replaceState(null,"","#"+t.dataset.view);}catch(e){} }));
+
+/* ---------- stages ---------- */
+const STAGES=["brief","convo","feedback","reflect","record"];
+let stage="brief";
+function showStage(s){ stage=s; STAGES.forEach(x=>{$("#p-"+x).hidden=(x!==s);}); $$(".stage").forEach(b=>{ b.setAttribute("aria-current",b.dataset.stage===s?"step":"false"); }); updateStageButtons(); if(s==="record") renderRecord(); if(s==="reflect") renderReflect(); if(s==="brief") renderBrief(); if(s!=="convo") stopStage(); }
+function updateStageButtons(){
+  const has=state.attempts.length>0;
+  $$(".stage").forEach(b=>{ const k=b.dataset.stage;
+    if(k==="convo") b.disabled=!(active);
+    if(k==="feedback"||k==="reflect"||k==="record") b.disabled=!has;
+    b.classList.toggle("done",(k==="feedback"&&has)||(k==="reflect"&&!!state.reflection)||(k==="record"&&!!state.validation&&state.validation.status==="validated"));
+  });
+}
+$$(".stage").forEach(b=>b.addEventListener("click",()=>{ if(b.disabled) return; if(b.dataset.stage==="feedback"){ const last=state.attempts[state.attempts.length-1]; if(last) renderFeedback(last); } showStage(b.dataset.stage); }));
+
+function renderStatus(){
+  const n=state.attempts.length, b=bestAttempt();
+  let st="Not started";
+  if(state.validation&&state.validation.status==="validated") st=`<span class="pill good">Validated · recorded in E1</span>`;
+  else if(state.validation&&state.validation.status==="returned") st=`<span class="pill warn">Returned · one more attempt</span>`;
+  else if(state.reflection) st=`<span class="pill accent">Reflection submitted · awaiting validation</span>`;
+  else if(b&&b.outcome==="attained") st=`<span class="pill good">Attained · reflection pending</span>`;
+  else if(n) st=`<span class="pill warn">In practice</span>`;
+  $("#statusbar").innerHTML=`<span>Learner <b class="mono">${state.learner}</b> <span class="muted small">(demo)</span></span><span>Attempts <b>${n}</b></span><span>Best <b>${b?OUT[b.outcome][1]+" (attempt "+b.n+")":"–"}</b></span><span>Status ${st}</span>`;
+  updateStageButtons();
+}
+
+/* ---------- brief ---------- */
+function renderBrief(){
+  $("#statements").innerHTML=STATEMENTS.map(s=>`<div class="statement"><div class="id">${s.id} · ${esc(s.badge)}</div><div class="name">${esc(s.name)}</div><div class="plain">${esc(s.plain)}</div><div class="verbatim">IHRP wording: ${esc(s.verbatim)}</div></div>`).join("");
+  const last=state.attempts[state.attempts.length-1];
+  $("#start-hint").textContent=last?(last.note?`Your note from attempt ${last.n}: "${last.note}"`:`Attempt ${last.n} was ${OUT[last.outcome][1].toLowerCase()}. This will be attempt ${last.n+1}.`):"This will be attempt 1.";
+}
+let sampleFn=null, liveAvailable=false;
+function setMode(m){ if(m==="live"&&!liveAvailable) return; $$(".mode").forEach(x=>x.classList.toggle("sel",x.dataset.mode===m)); $("#mode-"+m).checked=true; }
+$$(".mode").forEach(m=>m.addEventListener("click",()=>{ setMode(m.dataset.mode); }));
+(async()=>{
+  try{ if(window.claude&&typeof window.claude.use==="function") sampleFn=await window.claude.use("sample"); }catch(e){ sampleFn=null; }
+  liveAvailable=!!sampleFn;
+  const card=$("#mode-live-card");
+  if(!liveAvailable){ card.classList.add("off"); $("#mode-live").disabled=true; $("#live-note").textContent="Not available in this view. The live counterpart runs when the page is opened in Claude; in the Canvas deployment it is provided by the scenario engine. Guided practice shows the same flow on video."; }
+  else { $("#live-note").textContent="You answer in your own words; a simulated Daniel speaks back (voice from your device, captions on) and holds his position until you show the behaviour. Your first message asks you to allow this page to use Claude; it uses your own Claude usage. Scored against the same three statements."; }
+})();
+
+/* ---------- video stage ---------- */
+const vid=$("#vid"), cap=$("#captext"), capBox=$("#cap"), badge=$("#vbadge");
+let pendingEnd=null;
+function playClip(id,caption,onEnd){
+  pendingEnd=onEnd||null;
+  vid.loop=false; vid.muted=false; vid.src=CLIP(id); cap.textContent=caption||LINES[id]||""; capBox.hidden=false; badge.textContent="Daniel Lim"; badge.classList.add("rec");
+  $("#stage-state").textContent="Daniel is speaking…";
+  const p=vid.play(); if(p&&p.catch) p.catch(()=>{ $("#stage-state").textContent="Click Replay Daniel to play with sound."; });
+}
+function playIdle(){
+  pendingEnd=null; vid.loop=true; vid.muted=true; vid.src=CLIP("idle"); badge.textContent="Daniel Lim · listening"; badge.classList.remove("rec");
+  const p=vid.play(); if(p&&p.catch) p.catch(()=>{});
+}
+vid.addEventListener("ended",()=>{ const f=pendingEnd; pendingEnd=null; badge.classList.remove("rec"); $("#stage-state").textContent=""; if(f) f(); });
+$("#btn-replay").addEventListener("click",()=>{ if(!active) return; if(active.mode==="guided"&&active.lastClip){ const f=pendingEnd; playClip(active.lastClip,LINES[active.lastClip],f); } else if(active.mode==="live"&&active.lastSaid){ speakLine(active.lastSaid.text,active.lastSaid.mood,null); } });
+$("#btn-skip").addEventListener("click",()=>{ if(!active) return; if(active.mode==="guided"&&pendingEnd){ const f=pendingEnd; pendingEnd=null; vid.pause(); badge.classList.remove("rec"); $("#stage-state").textContent=""; f(); } else if(active.mode==="live"){ stopSpeaking(); } });
+function stopStage(){ try{ vid.pause(); vid.removeAttribute("src"); vid.load(); }catch(e){} stopSpeaking(); stopAvatar(); }
+
+/* live counterpart: Daniel listens on screen (idle loop) while the reply is voiced */
+let avState={mood:"idle"}, mouthTarget=0;
+function startAvatar(){ playIdle(); }
+function stopAvatar(){}
+let utter=null, mouthTimer=null, speakEndCb=null;
+function pickVoice(){ try{ const vs=speechSynthesis.getVoices(); if(!vs.length) return null; const by=f=>vs.find(f); return by(v=>/en[-_]SG/i.test(v.lang))||by(v=>/en[-_]GB/i.test(v.lang)&&/male|george|ryan|daniel|arthur|oliver|thomas/i.test(v.name))||by(v=>/en[-_]GB/i.test(v.lang))||by(v=>/^en/i.test(v.lang)&&/male|david|guy|mark|james/i.test(v.name))||by(v=>/^en/i.test(v.lang))||vs[0]; }catch(e){ return null; } }
+function speakLine(text,mood,onEnd){
+  stopSpeaking(); avState.mood=mood||"idle"; cap.textContent=text; badge.textContent="Daniel Lim"; badge.classList.add("rec"); $("#stage-state").textContent="Daniel is speaking…";
+  speakEndCb=onEnd||null; let lastBoundary=0;
+  const finish=()=>{ clearInterval(mouthTimer); mouthTimer=null; mouthTarget=0; badge.classList.remove("rec"); badge.textContent="Daniel Lim · listening"; $("#stage-state").textContent=""; avState.mood="idle"; const f=speakEndCb; speakEndCb=null; utter=null; if(f) f(); };
+  const haveTTS=("speechSynthesis" in window)&&("SpeechSynthesisUtterance" in window);
+  const est=Math.max(1.5,words(text)*0.38)*1000;
+  let t0=performance.now();
+  if(!haveTTS){ setTimeout(finish,est); return; }
+  try{
+    utter=new SpeechSynthesisUtterance(text); const v=pickVoice(); if(v) utter.voice=v; utter.rate=1.02; utter.pitch=0.9;
+    utter.onboundary=()=>{ lastBoundary=performance.now(); };
+    utter.onend=finish; utter.onerror=finish;
+    speechSynthesis.cancel(); speechSynthesis.speak(utter);
+    setTimeout(()=>{ if(utter&&!speechSynthesis.speaking&&!speechSynthesis.pending) finish(); },1200);
+  }catch(e){ setTimeout(finish,est); }
+}
+function stopSpeaking(){ try{ if("speechSynthesis" in window) speechSynthesis.cancel(); }catch(e){} clearInterval(mouthTimer); mouthTimer=null; mouthTarget=0; if(speakEndCb){ const f=speakEndCb; speakEndCb=null; utter=null; f(); } }
+if("speechSynthesis" in window){ try{ speechSynthesis.getVoices(); speechSynthesis.addEventListener("voiceschanged",()=>{}); }catch(e){} }
+
+/* ---------- attempt engine ---------- */
+let active=null, timerId=null, ctl=null;
+function addTr(who,text){ const d=document.createElement("div"); d.innerHTML=`<b>${esc(who)}:</b> `; d.appendChild(document.createTextNode(text)); $("#transcript").appendChild(d); }
+function startAttempt(){
+  const mode=$("#mode-live").checked&&liveAvailable?"live":"guided";
+  const n=state.attempts.length+1;
+  active={n,mode,startedAt:Date.now(),turn:0,pts:{S1:0,S2:0,S3:0},choices:[],resist:100,transcript:[],liveTurns:[],lastClip:null,lastSaid:null};
+  $("#transcript").innerHTML=""; $("#said").hidden=true; $("#options").innerHTML=""; $("#turn-label").textContent="";
+  $("#attempt-id").textContent=`C1-S1 / ${state.learner} / A${n}`;
+  $("#convo-mode").textContent=mode==="live"?"Live AI counterpart":"Guided practice";
+  $("#guided-ui").hidden=mode==="live"; $("#live-ui").hidden=mode!=="live"; $("#meter-card").hidden=mode==="live";
+  $("#meter").style.width="100%";
+  const last=state.attempts[state.attempts.length-1];
+  $("#stage-state").textContent=last&&last.note?`Your note from attempt ${last.n}: "${last.note}"`:"";
+  clearInterval(timerId); timerId=setInterval(()=>{ $("#timer").textContent=fmtDur((Date.now()-active.startedAt)/1000); },1000); $("#timer").textContent="00:00";
+  showStage("convo"); updateStageButtons();
+  if(mode==="guided"){ stopAvatar(); const op=OPENERS[(n-1)%OPENERS.length]; active.lastClip=op; active.transcript.push({who:"Daniel",text:LINES[op]}); addTr("Daniel",LINES[op]); playClip(op,LINES[op],()=>{ playIdle(); renderOptions(); }); }
+  else { startAvatar(); cap.textContent="Daniel is joining the meeting…"; liveStart(); }
+}
+function renderOptions(){
+  const t=TURNS[active.turn]; $("#turn-label").textContent=`Turn ${active.turn+1} of ${TURNS.length}. ${t.label} Choose your response:`;
+  const order=[0,1,2].sort(()=>Math.random()-.5);
+  $("#options").innerHTML=order.map((i,k)=>`<button class="opt" data-i="${i}"><span class="k">${"ABC"[k]}</span><span>${esc(t.options[i].text)}</span></button>`).join("");
+  $$("#options .opt").forEach(b=>b.addEventListener("click",()=>choose(+b.dataset.i)));
+}
+function choose(i){
+  const t=TURNS[active.turn], o=t.options[i];
+  $("#saidtext").textContent=o.text; $("#said").hidden=false; addTr("You",o.text); active.transcript.push({who:"You",text:o.text});
+  for(const k in o.pts) active.pts[k]+=o.pts[k];
+  active.choices.push({turn:active.turn+1,q:o.q,text:o.text,tip:o.tip});
+  active.resist=Math.max(0,Math.min(100,active.resist+Q_PTS[o.q])); $("#meter").style.width=active.resist+"%";
+  $("#options").innerHTML=""; $("#turn-label").textContent="";
+  active.turn++; active.lastClip=o.clip; active.transcript.push({who:"Daniel",text:LINES[o.clip]}); addTr("Daniel",LINES[o.clip]);
+  setTimeout(()=>{ playClip(o.clip,LINES[o.clip],()=>{ $("#said").hidden=true; if(active.turn<TURNS.length){ playIdle(); renderOptions(); } else finishGuided(); }); },900);
+}
+function finishGuided(){
+  const ratings={}; STATEMENTS.forEach(s=>{ ratings[s.id]=rate(s.id,active.pts[s.id]); });
+  const outcome=outcomeOf(ratings);
+  const closing=outcome==="attained"?"Daniel agrees three interviews on the matrix shortlist, scored on the same guide. He asks for the shortlist note today.":outcome==="nearly"?"Daniel goes along with the matrix shortlist, but he still thinks the AI score is the objective one. Expect the same argument next time.":"Daniel leaves with the shortlist he came in with. Nurul is out, and there is no defensible record of why.";
+  const evidence={}; STATEMENTS.forEach(s=>{ const ts=active.choices.filter(c=>TURNS[c.turn-1].options.some(o=>o.text===c.text&&o.pts[s.id])).map(c=>`turn ${c.turn} (${c.q})`); evidence[s.id]=ts.length?ts.join(", "):"not shown"; });
+  completeAttempt({ratings,outcome,evidence,closing,tips:null,summary:null});
+}
+function completeAttempt(res){
+  clearInterval(timerId); stopStage();
+  const a={n:active.n,mode:active.mode,startedAt:active.startedAt,endedAt:Date.now(),ratings:res.ratings,outcome:res.outcome,evidence:res.evidence,choices:active.choices,transcript:active.transcript,note:"",closing:res.closing||"",tips:res.tips||null,summary:res.summary||null};
+  a.duration=(a.endedAt-a.startedAt)/1000;
+  state.attempts.push(a); save(); active=null; ctl=null;
+  renderFeedback(a); showStage("feedback"); renderStatus();
+}
+$("#btn-start").addEventListener("click",startAttempt);
+$("#btn-abandon").addEventListener("click",()=>{ if(ctl) ctl.abort(); clearInterval(timerId); active=null; showStage("brief"); renderStatus(); });
+
+/* ---------- feedback ---------- */
+function renderFeedback(a){
+  const [cls,title]=OUT[a.outcome];
+  const next=a.outcome==="attained"?"Write your reflection, then the facilitator validates it. You can still practise again for fluency.":a.outcome==="nearly"?"One more attempt is recommended. Read the strong moves below, write your one-line note, and try again.":"Read the strong move for each turn that fell short, write your one-line note, and try again. Failed attempts stay on your record as part of the learning path; they do not count against you.";
+  $("#fb-banner").className="banner "+cls;
+  $("#fb-banner").innerHTML=`<div class="eyebrow">Attempt ${a.n} · ${a.mode==="live"?"live AI counterpart":"guided practice"} · ${fmtDur(a.duration)}</div><h2>${title}</h2><p>${esc(a.closing||"")}</p><p class="small"><b>Next step:</b> ${next}</p>${a.summary?`<p class="small">${esc(a.summary)}</p>`:""}`;
+  $("#fb-cards").innerHTML=STATEMENTS.map(s=>{ const r=a.ratings[s.id]; const tip=a.tips&&a.tips[s.id]?a.tips[s.id]:(r==="met"?"Shown clearly.":s.plain); return `<div class="statement"><div class="id">${s.id} · ${esc(s.short)}</div><div class="name">${esc(s.name)}</div><div class="rating ${r}">${RLABEL[r]}</div><div class="plain small"><b>Evidence:</b> ${esc(a.evidence[s.id]||"")}</div><div class="plain small"><b>${r==="met"?"What you did":"What a strong answer does"}:</b> ${esc(tip)}</div></div>`; }).join("");
+  if(a.mode==="guided"){ $("#fb-turns").innerHTML=a.choices.map(c=>`<div class="turn"><div class="q ${c.q==="strong"?"rating met":c.q==="partial"?"rating partly":"rating notyet"}">Turn ${c.turn}<br><span class="small">${c.q==="strong"?"Strong":c.q==="partial"?"Partial":"Weak"}</span></div><div><div class="small muted">You said: "${esc(c.text.length>140?c.text.slice(0,140)+"…":c.text)}"</div>${c.tip?`<div class="small"><b>Strong move:</b> ${esc(c.tip)}</div>`:""}</div></div>`).join(""); }
+  else { $("#fb-turns").innerHTML=`<div class="small muted">Transcript (kept with the attempt for your review and for moderation sampling):</div>`+a.transcript.map(t=>`<div class="turn"><div class="q small">${esc(t.who)}</div><div class="small">${esc(t.text)}</div></div>`).join(""); }
+  $("#learn-note").value=a.note||"";
+  $("#btn-save-note").onclick=()=>{ a.note=$("#learn-note").value.trim().slice(0,200); save(); $("#btn-save-note").textContent="Saved"; setTimeout(()=>{$("#btn-save-note").textContent="Save note";},1200); renderStatus(); };
+}
+$("#btn-again").addEventListener("click",()=>{ const a=state.attempts[state.attempts.length-1]; if(a&&$("#learn-note").value.trim()){ a.note=$("#learn-note").value.trim().slice(0,200); save(); } showStage("brief"); });
+$("#btn-to-reflect").addEventListener("click",()=>{ const a=state.attempts[state.attempts.length-1]; if(a&&$("#learn-note").value.trim()){ a.note=$("#learn-note").value.trim().slice(0,200); save(); } showStage("reflect"); });
+$("#btn-to-record").addEventListener("click",()=>showStage("record"));
+
+/* ---------- reflection ---------- */
+function renderReflect(){
+  const n=state.attempts.length;
+  $("#rq1").textContent=n>1?"1. Compare your attempts. What did you do differently in your best attempt, and what difference did it make to how Daniel responded?":"1. You have one attempt so far. What would you say differently to a more resistant hiring manager, and why?";
+  if(state.reflection){ $("#reflect-form").hidden=true; $("#reflect-done").hidden=false; $("#reflect-done").innerHTML=`<div class="note"><b>Submitted ${fmtTime(state.reflection.at)}.</b> Status: ${state.validation?(state.validation.status==="validated"?"validated and recorded in the course evidence record (E1)":"returned for one more attempt. Facilitator's comment: \""+esc(state.validation.comment)+"\"") :"awaiting facilitator validation"}.</div><div style="margin-top:12px;display:grid;gap:10px">${state.reflection.answers.map((t,i)=>`<div><b class="small">Prompt ${i+1}</b><p class="small">${esc(t)}</p></div>`).join("")}</div><div class="btnrow" style="margin-top:12px"><button class="btn" id="btn-reflect-record">View scenario record</button>${state.validation&&state.validation.status==="returned"?'<button class="btn primary" id="btn-reflect-redo">Revise after another attempt</button>':""}</div>`; $("#btn-reflect-record").onclick=()=>showStage("record"); const redo=$("#btn-reflect-redo"); if(redo) redo.onclick=()=>{ state.reflection=null; state.validation=null; save(); showStage("brief"); renderStatus(); }; }
+  else { $("#reflect-form").hidden=false; $("#reflect-done").hidden=true; checkReflect(); }
+}
+["r1","r2","r3"].forEach(id=>$("#"+id).addEventListener("input",()=>{ $("#"+id+"c").textContent=words($("#"+id).value)+" words"; checkReflect(); }));
+$("#r-decl").addEventListener("change",checkReflect);
+function checkReflect(){
+  const w=[1,2,3].map(i=>words($("#r"+i).value)); const total=w.reduce((a,b)=>a+b,0);
+  const ok=w.every(x=>x>=20)&&total>=100&&$("#r-decl").checked;
+  $("#btn-submit-reflect").disabled=!ok;
+  $("#reflect-hint").textContent=ok?`${total} words. Ready to submit.`:`${total} words so far. At least 20 words per prompt, 100 in total, and the declaration.`;
+}
+$("#btn-submit-reflect").addEventListener("click",()=>{ state.reflection={at:Date.now(),answers:[1,2,3].map(i=>$("#r"+i).value.trim())}; state.validation=null; save(); renderReflect(); renderStatus(); });
+
+/* ---------- record ---------- */
+function recordRows(){
+  const b=bestAttempt();
+  return state.attempts.map(a=>`<tr><td class="mono">A${a.n}${b&&b.n===a.n?' <span class="pill accent">best</span>':""}</td><td class="mono small">${fmtTime(a.startedAt)}</td><td>${a.mode==="live"?"Live AI":"Guided"}</td><td class="num mono">${fmtDur(a.duration)}</td>${STATEMENTS.map(s=>`<td><span class="rating ${a.ratings[s.id]}">${RLABEL[a.ratings[s.id]]}</span></td>`).join("")}<td>${pillFor(a.outcome)}</td><td class="small">${a.note?esc(a.note):'<span class="muted">–</span>'}</td></tr>`).join("");
+}
+function recStatusText(){
+  if(state.validation&&state.validation.status==="validated") return `<span class="pill good">Validated · E1 · ${fmtTime(state.validation.at)}</span>`;
+  if(state.validation&&state.validation.status==="returned") return `<span class="pill warn">Returned for one more attempt</span>`;
+  if(state.reflection) return `<span class="pill accent">Reflection submitted · awaiting validation</span>`;
+  const b=bestAttempt(); if(b&&b.outcome==="attained") return `<span class="pill good">Attained · reflection pending</span>`;
+  return `<span class="pill warn">In practice</span>`;
+}
+function renderRecord(){
+  const b=bestAttempt();
+  $("#rec-status").innerHTML=recStatusText();
+  $("#rec-head").innerHTML=`<dt>Learner</dt><dd class="mono">${state.learner} (pseudonymised in exports)</dd><dt>Scenario</dt><dd>C1-S1 The shortlist challenge · Unit 1 (LO1) · S1, S2, S3</dd><dt>Attempts</dt><dd>${state.attempts.length}</dd><dt>Best attempt</dt><dd>${b?`A${b.n} · ${OUT[b.outcome][1]}`:"–"}</dd><dt>Evidence link</dt><dd>${state.validation&&state.validation.status==="validated"?"Course evidence record · E1 · Unit 1 role play observation":"Not yet recorded"}</dd>`;
+  $("#rec-table tbody").innerHTML=recordRows();
+  $("#rec-reflection").innerHTML=state.reflection?`<div class="note small"><b>Self-reflection</b> submitted ${fmtTime(state.reflection.at)} · ${state.validation?(state.validation.status==="validated"?`validated by ${esc(state.validation.by)} on ${fmtTime(state.validation.at)}`:`returned by ${esc(state.validation.by)} on ${fmtTime(state.validation.at)}: "${esc(state.validation.comment)}"`):"awaiting validation"}</div>`:`<div class="note small">No self-reflection submitted yet. ${b&&b.outcome==="attained"?"Your best attempt has attained; submit your reflection so the facilitator can validate it.":"Submit it after your best attempt."}</div>`;
+}
+$("#btn-record-again").addEventListener("click",()=>showStage("brief"));
+$("#btn-record-facilitator").addEventListener("click",()=>{ showView("facilitator"); try{history.replaceState(null,"","#facilitator");}catch(e){} });
+$("#btn-reset").addEventListener("click",()=>{ if($("#btn-reset").dataset.arm!=="1"){ $("#btn-reset").dataset.arm="1"; $("#btn-reset").textContent="Click again to clear all attempts"; setTimeout(()=>{ $("#btn-reset").dataset.arm="0"; $("#btn-reset").textContent="Reset this demo"; },3000); return; } state=fresh(); save(); ["r1","r2","r3"].forEach(i=>{$("#"+i).value="";}); $("#r-decl").checked=false; ["fc1","fc2","fc3"].forEach(i=>{$("#"+i).checked=false;}); $("#btn-reset").dataset.arm="0"; $("#btn-reset").textContent="Reset this demo"; showStage("brief"); renderStatus(); });
+
+/* ---------- facilitator ---------- */
+function renderFacilitator(){
+  const b=bestAttempt();
+  $("#fac-record").innerHTML=state.attempts.length?`<dl class="kv small"><dt>Learner</dt><dd class="mono">${state.learner}</dd><dt>Status</dt><dd>${recStatusText()}</dd><dt>Best attempt</dt><dd>${b?`A${b.n} · ${OUT[b.outcome][1]} · ${STATEMENTS.map(s=>s.short+": "+RLABEL[b.ratings[s.id]]).join(" · ")}`:"–"}</dd></dl><div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Attempt</th><th>When</th><th>Mode</th><th class="num">Duration</th><th>S1</th><th>S2</th><th>S3</th><th>Outcome</th><th>Learner's note</th></tr></thead><tbody>${recordRows()}</tbody></table></div>`:`<p class="muted">No attempts yet for this learner. Run the scenario in "Try the scenario" first.</p>`;
+  $("#fac-reflection").innerHTML=state.reflection?`<div class="small"><b>Reflection submitted ${fmtTime(state.reflection.at)}</b></div><div style="display:grid;gap:8px;margin-top:6px">${state.reflection.answers.map((t,i)=>`<div class="small"><span class="muted">Prompt ${i+1}.</span> ${esc(t)}</div>`).join("")}</div>`:`<p class="muted small">No reflection submitted yet. Validation needs both an attained attempt and the submitted reflection.</p>`;
+  $("#fc1").checked=!!(b&&b.outcome==="attained");
+  const already=!!state.validation;
+  $("#fac-outcome").innerHTML=already?`<div class="note small" style="margin-top:10px">${state.validation.status==="validated"?`<b>Validated</b> by ${esc(state.validation.by)} on ${fmtTime(state.validation.at)}. Recorded in the course evidence record: E1 · Unit 1 role play observation · C1-S1. The assessor will confirm, not re-assess.`:`<b>Returned</b> by ${esc(state.validation.by)} on ${fmtTime(state.validation.at)}: "${esc(state.validation.comment)}"`}</div>`:"";
+  facCheck();
+}
+["fc1","fc2","fc3"].forEach(i=>$("#"+i).addEventListener("change",facCheck));
+$("#fac-comment").addEventListener("input",facCheck);
+function facCheck(){
+  const b=bestAttempt(); const canV=!!(b&&b.outcome==="attained")&&!!state.reflection&&$("#fc1").checked&&$("#fc2").checked&&$("#fc3").checked&&!(state.validation&&state.validation.status==="validated");
+  $("#btn-validate").disabled=!canV;
+  $("#btn-return").disabled=!state.reflection||!$("#fac-comment").value.trim()||(state.validation&&state.validation.status==="validated");
+  $("#fac-hint").textContent=!state.reflection?"Waiting for the learner's reflection.":(!(b&&b.outcome==="attained")?"No attained attempt yet: return with a comment.":(canV?"All three checks ticked.":"Tick the three checks to validate, or add a comment to return."));
+}
+$("#btn-validate").addEventListener("click",()=>{ state.validation={status:"validated",by:"Facilitator (demo)",at:Date.now(),comment:$("#fac-comment").value.trim()}; save(); renderFacilitator(); renderStatus(); });
+$("#btn-return").addEventListener("click",()=>{ state.validation={status:"returned",by:"Facilitator (demo)",at:Date.now(),comment:$("#fac-comment").value.trim()}; save(); renderFacilitator(); renderStatus(); });
+
+/* ---------- engine view ---------- */
+function renderEngine(){
+  const def={
+    scenario:{id:"C1-S1",title:"The shortlist challenge",course:"C1 Workplace Fairness and Inclusivity with AI",unit:"Unit 1 (LO1)",lens:"Trust and fairness; structure (who decides, on what evidence)",setting:"Harbourline Logistics Pte Ltd (fictional Singapore logistics SME, 180 staff, Tuas DC); Meeting Room 3B",duration_min:{guided:[4,6],live:[10,15]}},
+    counterpart:{name:"Daniel Lim",role:"Head of Operations Planning",profile:"Singaporean, 46, twelve years in logistics operations; impatient, results-driven, not hostile; respects evidence",voice:"en-SG male voice clone of a consenting speaker (production); library voice 'Lachie – direct and reassuring', speed 1.0, in this demonstration",avatar:"daniel-v3 (photoreal, AI-generated likeness of a fictional person; photo-to-video avatar; variants: neutral, stern, smile, warm; meeting-room scene; 16:9, 1080p render)",expressiveness:{idle:"low",thoughtful:"low",impatient:"medium",pleased:"medium",warm:"medium"},moods:["idle","impatient","thoughtful","pleased","warm"]},
+    learner:{role:"HR business partner for Operations",task:"Agree a defensible shortlist: skills-first criteria applied to all; fair consideration under FCF and TGFEP; clear line on the AI screening score"},
+    statements:STATEMENTS.map(s=>({id:s.id,badge:s.badge,name:s.name,plain:s.plain,ihrp_wording:s.verbatim,thresholds:{met:s.met,partly:s.partly}})),
+    evidence_pack:{matrix_weights:{planning_experience:0.3,sop_work_sample:0.35,planning_systems:0.2,stakeholder_communication:0.15},interview_bar:3.5,candidates:[{name:"Nurul Aisyah",weighted:4.2,ai_match:0.71},{name:"Priya Raman",weighted:3.8,ai_match:0.78},{name:"Marcus Tan",weighted:3.7,ai_match:0.92},{name:"Kevin Ong",weighted:2.8,ai_match:0.85}],ai_tool_note:"CV-to-job-description similarity; not validated against performance; weights wording and previous employers; first-sort use only"},
+    guided:{openers:OPENERS.map(id=>({clip:id,mood:MOOD[id],text:LINES[id]})),resistance:{start:100,strong:-22,partial:-8,weak:8},turns:TURNS.map((t,i)=>({turn:i+1,cue:t.label,options:t.options.map(o=>({quality:o.q,pts:o.pts,learner_says:o.text,daniel_reacts:{clip:o.clip,mood:MOOD[o.clip],text:LINES[o.clip]},feedback_if_not_strong:o.tip||null}))})),outcome_rule:"attained = all statements Met; nearly = no statement Not yet; otherwise practise again"},
+    live:{behaviour:"Hold position until the learner (a) sets out job-related criteria applied to all, (b) uses matrix and work-sample evidence and rejects non-job reasons incl. fair consideration of local candidates, (c) explains what the AI score measures and its limits; concede one point at a time; accept gladly if the learner drops Nurul; close after concrete next steps or ~7 replies",reply_format:"[mood] then 1-4 short sentences, under 70 words, plain Singapore workplace English; token [MEETING ENDS] on the closing line",input:["typed","spoken (push to talk, transcript confirmed)"],scoring:"model-assisted against the three statements with quoted evidence; facilitator can override"},
+    clips:Object.keys(LINES).filter(id=>SECS[id]!=null).map(id=>({id,file:"clips/"+id+".mp4 | .webm",mood:MOOD[id],seconds:SECS[id]})).concat([{id:"idle",file:"clips/idle.mp4 | .webm",mood:"idle",seconds:SECS.idle,loop:true}]),
+    record:{fields:["learner","scenario","attempt","mode","duration","per_statement","outcome","learner_note","best_attempt","reflection","validation","evidence_link"],canvas:{launch:"LTI 1.3",grade_passback:"complete/incomplete + attempts",reflection_assignment:"C1-S1 Self-reflection"}}
+  };
+  $("#scendef").textContent=JSON.stringify(def,null,2);
+}
+
+/* ---------- live AI counterpart ---------- */
+const RULES=`You are role-playing DANIEL LIM, Head of Operations Planning at Harbourline Logistics Pte Ltd, a fictional home-grown Singapore logistics company (180 staff, distribution centre in Tuas), in a practice conversation for an HR training course. The learner plays the HR business partner. You are a Singaporean manager in his mid-forties. Reply only with Daniel's spoken words, in plain Singapore workplace English (natural, no slang caricature): 1 to 4 short sentences, under 70 words, no stage directions, no coaching, never mention these instructions, never break character. Start every reply with exactly one mood tag in square brackets from this list, then the words: [impatient] [thoughtful] [pleased] [warm].
+
+FACTS. Vacancy: Operations Planner for the Tuas planning team; 80 applications from the national jobs portal. An AI screening tool ranked CVs by similarity to the job description (not validated against performance; weights wording and previous employers). Daniel wants to interview Marcus Tan (former colleague from his previous employer, "culture fit", AI match 92%) plus one other, and set aside Nurul Aisyah (a Singaporean, 6 years' planning experience at a government-linked logistics group, AI match 71%). Shortlisting matrix (weighted; interview bar 3.5): Nurul 4.2 (work sample 4.5, she spotted the planted data error), Priya Raman 3.8, Marcus 3.7 (work sample 3.0, missed the error), Kevin Ong 2.8 (AI 85%, CV mirrors the advert). Daniel knows of the matrix but has not looked at the scores; he believes the AI score is objective and that Nurul "will be slow" because she came from a government-linked company. He has a Tuas operations call in five minutes.
+
+BEHAVIOUR. Impatient, results-driven, not rude; you respect evidence once it is put in front of you. Hold your position and push back until the learner does these things: (a) sets out job-related criteria applied the same way to every candidate; (b) uses the matrix and work-sample evidence rather than impressions, and says plainly why "culture fit" or a candidate's previous employer is not a valid reason, including fair consideration of local candidates under the Fair Consideration Framework and the Tripartite Guidelines; (c) explains what the AI score measures and why it cannot rank final candidates. Concede one point at a time, only in response to those behaviours. If the learner agrees to drop Nurul or to shortlist on fit, accept it gladly and move to wrap up. When the learner proposes concrete next steps after you have conceded, or after about seven of your replies, end with one natural closing line followed on a new line by exactly: [MEETING ENDS]`;
+function parseMood(text){ const m=text.match(/^\s*\[(impatient|thoughtful|pleased|warm)\]\s*/i); return {mood:m?m[1].toLowerCase():"idle",clean:text.replace(/^\s*\[(impatient|thoughtful|pleased|warm)\]\s*/i,"").replace(/\[MEETING ENDS\]/g,"").trim()}; }
+function liveStart(){ active.liveTurns=[{role:"user",content:RULES+"\n\nOpen the meeting with your first line to the HR business partner."}]; liveAsk(); }
+async function liveAsk(){
+  if(!sampleFn||!active) return;
+  ctl=new AbortController(); $("#live-stop").hidden=false; $("#live-send").disabled=true; $("#live-status").textContent=""; avState.mood="thoughtful"; cap.textContent="Daniel is thinking…"; badge.textContent="Daniel Lim · thinking"; $("#stage-state").textContent="Waiting for Daniel…";
+  try{
+    const {text}=await sampleFn(active.liveTurns,{cache:false,modelTier:"quick",signal:ctl.signal});
+    const ended=/\[MEETING ENDS\]/.test(text); const {mood,clean}=parseMood(text);
+    active.liveTurns.push({role:"assistant",content:text}); active.transcript.push({who:"Daniel",text:clean}); addTr("Daniel",clean); active.lastSaid={text:clean,mood};
+    speakLine(clean,mood,()=>{ if(ended){ $("#live-status").textContent="Daniel has ended the meeting. Click \"End conversation and get feedback\"."; $("#live-send").disabled=true; } else { $("#live-send").disabled=false; $("#live-input").focus(); } });
+  }catch(e){
+    const code=e&&e.code||"upstream_error"; avState.mood="idle"; cap.textContent="";
+    if(code==="cancelled"){ $("#live-send").disabled=false; }
+    else if(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(code)){ $("#live-status").textContent="The live counterpart is not available in this view (Claude access was not allowed). Abandon this attempt and use guided practice."; $("#live-send").disabled=true; }
+    else if(code==="rate_limited"){ $("#live-status").textContent="Claude is busy or your usage limit was reached. Wait a moment, then send again."; $("#live-send").disabled=false; }
+    else { $("#live-status").textContent="The connection was interrupted. Send your message again."; $("#live-send").disabled=false; }
+  }finally{ $("#live-stop").hidden=true; ctl=null; }
+}
+$("#live-send").addEventListener("click",()=>{ const v=$("#live-input").value.trim(); if(!v||!active) return; $("#live-input").value=""; $("#saidtext").textContent=v; $("#said").hidden=false; addTr("You",v); active.transcript.push({who:"You",text:v}); active.liveTurns.push({role:"user",content:v}); if(active.liveTurns.length>24) active.liveTurns.splice(1,2); liveAsk(); });
+$("#live-input").addEventListener("keydown",e=>{ if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)) $("#live-send").click(); });
+$("#live-stop").addEventListener("click",()=>{ if(ctl) ctl.abort(); });
+$("#live-end").addEventListener("click",async()=>{
+  if(!active) return; const mine=active.transcript.filter(t=>t.who==="You");
+  if(mine.length<2){ $("#live-status").textContent="Say at least two things to Daniel before ending."; return; }
+  if(ctl) ctl.abort(); stopSpeaking();
+  $("#live-end").disabled=true; $("#live-send").disabled=true; $("#live-status").textContent="Scoring against the three statements…"; cap.textContent="Scoring your conversation…"; avState.mood="idle";
+  const transcript=active.transcript.map(t=>`${t.who}: ${t.text}`).join("\n");
+  const prompt=`You are the feedback engine for an HR training role play set in Singapore. Score the HR business partner ("You") in the transcript below against three IHRP performance statements. Judge only what the learner actually said; Daniel's words are context. Be fair and specific, in plain English.
+
+Statements:
+S1 Identify Skills and Apply Objective Shortlisting: shortlists on job-related skills with the same criteria for every candidate (work samples, qualifications, experience) and gives local candidates fair consideration (Fair Consideration Framework). Met = criteria stated and applied to all; Partly = principle stated without applying it to the candidates; Not yet = accepts fit/referral/AI rank as the basis.
+S2 Apply Skills-Based Decision Making: decides on skills, experience and ability to do the job (TGFEP) and sets aside non-job factors ("culture fit", previous employer type). Met = uses the matrix/work-sample evidence and names the invalid reasons; Partly = rejects fit but does not use the evidence; Not yet = accepts or records the non-job reason.
+S3 Tool Selection and Application: explains what the AI screening score measures (CV-to-advert similarity, not validated against performance, weights wording and employers), what it can be used for (first sort) and not (ranking final candidates). Met = all three elements; Partly = calls it "one input" without explaining; Not yet = treats the score as objective or does not address it.
+
+Transcript:
+${transcript}
+
+Reply with only JSON in this shape: {"S1":{"rating":"met|partly|notyet","evidence":"short quote or 'not shown'","tip":"one sentence: what a strong answer does, or what the learner did well"},"S2":{...},"S3":{...},"summary":"two sentences for the learner","closing":"one sentence describing how the meeting ended"}`;
+  let data=null;
+  try{ data=await sampleFn.json(prompt,{modelTier:"default"}); }catch(e){ data=null; }
+  const ok=data&&["S1","S2","S3"].every(k=>data[k]&&["met","partly","notyet"].includes(data[k].rating));
+  if(!ok){ $("#live-status").textContent="Scoring did not come back. You can try again."; $("#live-end").disabled=false; cap.textContent=""; return; }
+  const ratings={},evidence={},tips={}; ["S1","S2","S3"].forEach(k=>{ ratings[k]=data[k].rating; evidence[k]=String(data[k].evidence||"").slice(0,240); tips[k]=String(data[k].tip||"").slice(0,300); });
+  $("#live-end").disabled=false;
+  completeAttempt({ratings,outcome:outcomeOf(ratings),evidence,tips,summary:String(data.summary||"").slice(0,400),closing:String(data.closing||"").slice(0,200)});
+});
+
+/* ---------- boot ---------- */
+function boot(){
+  renderBrief(); renderStatus(); showStage("brief");
+  let h=""; try{ h=(location.hash||"").replace("#",""); }catch(e){}
+  showView(VIEWS.includes(h)?h:"try");
+}
+boot();
+})();
+</script>
+</body></html>
