@@ -668,14 +668,8 @@ function renderStatus(){
   updateStageButtons();
 }
 
-/* ---------- timed captions: a sentence or two at a time, paced over the clip ---------- */
-const SENT=/(?<=[.!?\u2026;:])\s+(?=["'(A-Za-z])/;
-function capChunks(text){ const sents=String(text||"").split(SENT); const out=[]; let cur=""; for(const x of sents){ if(cur&&(cur+" "+x).trim().length>125){ out.push(cur.trim()); cur=x; } else cur=(cur+" "+x); } if(cur.trim()) out.push(cur.trim()); return out.length?out:[String(text||"")]; }
-function bindCaptions(video,capEl){ video._capChunks=[]; video.addEventListener("timeupdate",()=>{ const ch=video._capChunks; if(!ch||ch.length<2) return; const d=video.duration||video._capDur||0; if(!d) return; const total=ch.reduce((a,c)=>a+c.length,0); const frac=Math.min(1,video.currentTime/d); let acc=0, idx=ch.length-1; for(let i=0;i<ch.length;i++){ acc+=ch[i].length; if(frac<acc/total){ idx=i; break; } } if(capEl._idx!==idx){ capEl._idx=idx; capEl.textContent=ch[idx]; } }); }
-function setCaption(video,capEl,text,dur){ video._capChunks=capChunks(text); video._capDur=dur||0; capEl._idx=0; capEl.textContent=video._capChunks[0]||""; }
-
 /* ---------- brief ---------- */
-const vidB=$("#vid-brief"); bindCaptions(vidB,$("#captext-brief"));
+const vidB=$("#vid-brief");
 function renderBrief(){
   $("#statements").innerHTML=STATEMENTS.map(s=>`<div class="statement"><div class="id">${s.id} · ${esc(s.ihrp.split(":")[0])}</div><div class="name">${esc(s.short)}</div><div class="plain">${esc(s.plain)}</div><div class="verbatim">IHRP statement: ${esc(s.ihrp.split(": ")[1]||s.ihrp)}</div></div>`).join("");
   $("#brief-text").textContent=CLIPLINE.c_brief;
@@ -687,7 +681,7 @@ function renderBrief(){
   $("#start-hint").textContent=last?(last.note?`Your note from attempt ${last.n}: "${last.note}"`:`Attempt ${last.n} was ${OUT[last.outcome][1].toLowerCase()}. This will be attempt ${last.n+1}.`):"This will be attempt 1.";
   const secs=SECS.c_brief; if(secs) $("#btn-brief-play").textContent=`Play the brief (${Math.floor(secs/60)} min ${Math.round(secs%60)} s)`;
 }
-$("#btn-brief-play").addEventListener("click",()=>{ $("#vplay-brief").hidden=true; $("#cap-brief").hidden=false; setCaption(vidB,$("#captext-brief"),CLIPLINE.c_brief,SECS.c_brief); vidB.src=CLIP("c_brief"); vidB.controls=true; const p=vidB.play(); if(p&&p.catch) p.catch(()=>{}); });
+$("#btn-brief-play").addEventListener("click",()=>{ $("#vplay-brief").hidden=true; $("#cap-brief").hidden=false; $("#captext-brief").textContent=CLIPLINE.c_brief; vidB.src=CLIP("c_brief"); vidB.controls=true; const p=vidB.play(); if(p&&p.catch) p.catch(()=>{}); });
 vidB.addEventListener("ended",()=>{ $("#vplay-brief").hidden=false; $("#btn-brief-play").textContent="Play the brief again"; });
 function stopBrief(){ try{ vidB.pause(); }catch(e){} }
 
@@ -699,18 +693,18 @@ let sampleFn=null;
 })();
 
 /* ---------- video stage ---------- */
-const vid=$("#vid"), cap=$("#captext"), capWho=$("#capwho"), badge=$("#vbadge"); bindCaptions(vid,cap);
+const vid=$("#vid"), cap=$("#captext"), capWho=$("#capwho"), badge=$("#vbadge");
 let pendingEnd=null, lastClip=null;
 function setWho(w){ const p=WHO[w]; capWho.textContent=`${p.name} · ${p.role}`; badge.textContent=p.short; }
 function playClip(id,onEnd){
   const w=CLIPWHO[id]||"noraini"; setWho(w); lastClip=id;
   pendingEnd=onEnd||null;
-  vid.loop=false; vid.muted=false; vid.src=CLIP(id); setCaption(vid,cap,CLIPLINE[id]||"",SECS[id]); badge.classList.add("rec");
+  vid.loop=false; vid.muted=false; vid.src=CLIP(id); cap.textContent=CLIPLINE[id]||""; badge.classList.add("rec");
   $("#stage-state").textContent=`${WHO[w].short} is speaking…`;
   const p=vid.play(); if(p&&p.catch) p.catch(()=>{ $("#stage-state").textContent="Click Replay to play with sound."; });
 }
 function playIdle(w){
-  pendingEnd=null; setWho(w); const p=WHO[w]; vid.loop=true; vid.muted=true; vid.src=CLIP(p.idle); badge.textContent=p.short+" · listening"; badge.classList.remove("rec"); vid._capChunks=[]; cap.textContent="";
+  pendingEnd=null; setWho(w); const p=WHO[w]; vid.loop=true; vid.muted=true; vid.src=CLIP(p.idle); badge.textContent=p.short+" · listening"; badge.classList.remove("rec"); cap.textContent="";
   const q=vid.play(); if(q&&q.catch) q.catch(()=>{});
 }
 vid.addEventListener("ended",()=>{ const f=pendingEnd; pendingEnd=null; badge.classList.remove("rec"); $("#stage-state").textContent=""; if(f) f(); });
@@ -884,9 +878,9 @@ $("#btn-start").addEventListener("click",startAttempt);
 $("#btn-abandon").addEventListener("click",()=>{ clearInterval(timerId); active=null; busy=false; showStage("brief"); renderStatus(); });
 
 /* ---------- feedback ---------- */
-const vidD=$("#vid-debrief"); bindCaptions(vidD,$("#captext-debrief"));
+const vidD=$("#vid-debrief");
 function debriefClip(outcome){ return outcome==="attained"?"c_debrief_a":outcome==="nearly"?"c_debrief_b":"c_debrief_c"; }
-function playDebrief(id){ $("#vplay-debrief").hidden=true; setCaption(vidD,$("#captext-debrief"),CLIPLINE[id],SECS[id]); vidD.src=CLIP(id); vidD.controls=true; const p=vidD.play(); if(p&&p.catch) p.catch(()=>{ $("#vplay-debrief").hidden=false; }); }
+function playDebrief(id){ $("#vplay-debrief").hidden=true; $("#captext-debrief").textContent=CLIPLINE[id]; vidD.src=CLIP(id); vidD.controls=true; const p=vidD.play(); if(p&&p.catch) p.catch(()=>{ $("#vplay-debrief").hidden=false; }); }
 function stopDebrief(){ try{ vidD.pause(); }catch(e){} }
 $("#btn-debrief-play").addEventListener("click",()=>{ const a=state.attempts[state.attempts.length-1]; if(a) playDebrief(debriefClip(a.outcome)); });
 function renderFeedback(a,autoplay){
@@ -899,7 +893,7 @@ function renderFeedback(a,autoplay){
   $("#fb-turns").innerHTML=a.steps.map(s=>{ const b=BEATS.find(x=>x.id===s.beat); return `<div class="turn"><div class="q cls ${s.cls}">${s.beat}<br><span class="small">${CLS_LABEL[s.cls]}</span></div><div><div class="small muted">${esc(b.prompt)}</div><div class="small">You said: "${esc(s.said.length>220?s.said.slice(0,220)+"…":s.said)}"</div><div class="small"><b>${s.part==="A"?"Noraini":"Arun"} heard:</b> ${esc(s.heard)}${s.flags.length?` <span class="pill bad">${esc(s.flags.map(f=>(SC.flags.find(x=>x.id===f)||{}).label||f).join("; "))}</span>`:""}</div>${s.cls!=="A"?`<div class="small"><b>Strong move:</b> ${esc(b.hint)}</div>`:""}${s.hint?`<div class="small muted">Hint used at this step.</div>`:""}</div></div>`; }).join("");
   $("#learn-note").value=a.note||"";
   $("#btn-save-note").onclick=()=>{ a.note=$("#learn-note").value.trim().slice(0,200); save(); $("#btn-save-note").textContent="Saved"; setTimeout(()=>{$("#btn-save-note").textContent="Save note";},1200); renderStatus(); };
-  const dc=debriefClip(a.outcome); setCaption(vidD,$("#captext-debrief"),CLIPLINE[dc],SECS[dc]);
+  const dc=debriefClip(a.outcome); $("#captext-debrief").textContent=CLIPLINE[dc];
   if(autoplay) playDebrief(dc); else { $("#vplay-debrief").hidden=false; vidD.removeAttribute("src"); }
 }
 $("#btn-again").addEventListener("click",()=>{ const a=state.attempts[state.attempts.length-1]; if(a&&$("#learn-note").value.trim()){ a.note=$("#learn-note").value.trim().slice(0,200); save(); } showStage("brief"); });
