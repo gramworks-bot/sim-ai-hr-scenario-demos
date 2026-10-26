@@ -168,10 +168,8 @@ footer.wrap{padding-block:0 40px;color:var(--muted);font-size:.86rem}
 <nav class="tabs" aria-label="Sections">
   <div class="wrap" role="tablist">
     <button class="tab" role="tab" data-view="try" aria-selected="true">Try the scenario</button>
-    <button class="tab" role="tab" data-view="engine" aria-selected="false">Scenario engine</button>
     <button class="tab" role="tab" data-view="guide" aria-selected="false">Learner guide</button>
     <button class="tab" role="tab" data-view="facilitator" aria-selected="false">Facilitator view</button>
-    <button class="tab" role="tab" data-view="hosting" aria-selected="false">Hosting on Canvas</button>
   </div>
 </nav>
 
@@ -365,63 +363,6 @@ footer.wrap{padding-block:0 40px;color:var(--muted);font-size:.86rem}
   </div>
 </section>
 
-<!-- ================= ENGINE ================= -->
-<section class="view" id="view-engine" hidden>
-  <div class="card">
-    <h2>The scenario engine</h2>
-    <p class="lead">Every scenario in the bank is a data file the engine runs. The engine turns it into a conversation with a counterpart who speaks on screen, scores what the learner says against the IHRP performance statements, keeps the scenario record and hands attainment to Canvas. The same definition runs in three ways: pre-rendered video (guided practice), live video (AI counterpart) and facilitator-led from the printed brief.</p>
-    <div class="flow" aria-label="Scenario engine components">
-      <div class="box eng"><b>1. Scenario definition</b><span class="w">Brief, counterpart, statements, evidence pack, guided turns, live-counterpart rules, scoring rubric, clip manifest. Authored by CET Global's subject-matter experts; one file per scenario.</span></div>
-      <div class="box eng"><b>2. Dialogue manager</b><span class="w">Guided: a branching state machine (Daniel's reaction depends on the choice; resistance rises or falls). Live: a language model plays Daniel from the counterpart brief and behaviour rules, one reply at a time.</span></div>
-      <div class="box eng"><b>3. Speech and avatar</b><span class="w">A commercial avatar video service (HeyGen Avatar IV in this demonstration) turns each line into video: its neural voice speaks the line, and a photo-to-video model animates Daniel's portrait with lips, face, head, shoulders and hands moving together; the mood sets the portrait variant, the expressiveness level and a short motion prompt. Scripted lines are pre-rendered clips; live replies use the same service's streaming avatar.</span></div>
-      <div class="box eng"><b>4. Learner input</b><span class="w">Choice (guided), typed, or spoken with push-to-talk and a transcript the learner confirms before sending. Microphone and camera are never on without the learner pressing the button.</span></div>
-      <div class="box eng"><b>5. Scoring</b><span class="w">Rubric mapped one-to-one to the IHRP statements. Guided: rule-based from the choices. Live: model-assisted, with the evidence quoted so the facilitator can check it.</span></div>
-      <div class="box canvas"><b>6. Record and Canvas</b><span class="w">Attempts, notes, best attempt and reflection status in the scenario record; attainment written back to the Canvas gradebook; facilitator validates in SpeedGrader.</span></div>
-    </div>
-    <div class="legend"><span><i style="background:var(--surface);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)"></i>Scenario engine (training provider)</span><span><i style="background:var(--surface);border-color:var(--navy);box-shadow:inset 0 0 0 1px var(--navy)"></i>Inside Canvas</span></div>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <h3>How the video is made</h3>
-      <ol class="steps">
-        <li><strong>Portrait</strong>A photoreal portrait of Daniel is generated as a fictional person (no real individual): a Singaporean Chinese man in his mid-40s, light blue shirt, lanyard and staff pass, in a Singapore meeting room. Four expression variants of the same person: neutral, stern, pleased, warm. SIM signs off the likeness before the full bank is rendered.</li>
-        <li><strong>Line and speech</strong>Each of Daniel's scripted lines (17 for C1-S1) is sent to the avatar service with a voice: here a direct, reassuring male English voice from the service's library at normal speed. There is no stock Singapore English voice; production uses a voice clone recorded by a consenting Singaporean speaker, which the same service supports.</li>
-        <li><strong>Mood</strong>The scenario definition gives each line a mood. It picks the portrait variant (impatient → stern, pleased → smile, warm → warm, thoughtful and listening → neutral), the expressiveness level (low for thoughtful and listening, medium otherwise) and a short motion prompt, for example "brisk delivery, slight frown, firm small head movements, one quick open-hand gesture" for an impatient line.</li>
-        <li><strong>Photo-to-video model</strong>The service's photo-to-video avatar model animates the whole portrait from the speech and the motion prompt: lip-sync, facial expression, eye contact and blinks, head and shoulder movement and hand gestures, all in one pass, at 1080p. The meeting-room background moves naturally with the camera framing.</li>
-        <li><strong>Clip</strong>The 1080p render is fetched through the service's API, the staff pass is blurred, and the clip is downscaled to 960×540 as H.264 (plus a WebM copy) so the whole set is 16 MB, served next to the scenario and cached by the browser. The 17 lines and the listening loop (2 min 13 s of video) rendered in about 20 minutes and used about US$7 of API credit, roughly US$3 per finished minute.</li>
-        <li><strong>Live replies</strong>Production uses the same service's streaming avatar for the live counterpart: the dialogue model's reply is spoken by Daniel within a second or two of the learner sending, while the listening loop covers the thinking time. This demonstration shows the listening loop and voices the reply from the viewer's device.</li>
-      </ol>
-    </div>
-  </div>
-
-    <div class="card">
-      <h3>Demonstration and production</h3>
-      <div class="tablewrap">
-        <table>
-          <thead><tr><th>Part</th><th>In this demonstration</th><th>In production (Canvas)</th></tr></thead>
-          <tbody>
-            <tr><td>Daniel's scripted lines</td><td>17 pre-rendered video clips with sound and captions</td><td>The same clips, served by the scenario service</td></tr>
-            <tr><td>Live counterpart</td><td>Daniel's listening loop on screen; the reply is voiced by the viewer's own device (quality varies) and captioned; replies from the viewer's Claude access after consent</td><td>Scenario engine with its own dialogue model, a cloned Singapore English voice and the avatar service's streaming avatar speaking each reply; no learner account with a public AI tool</td></tr>
-            <tr><td>Learner's answer</td><td>Choice or typed</td><td>Choice, typed or spoken (push to talk; transcript confirmed before sending)</td></tr>
-            <tr><td>Scoring</td><td>Rule-based (guided); model-assisted with quoted evidence (live)</td><td>Same, with facilitator override and second-assessor sampling</td></tr>
-            <tr><td>Record</td><td>Kept in this browser only; "Reset this demo" clears it</td><td>Scenario service; summary written to the Canvas gradebook through the external-tool link</td></tr>
-            <tr><td>Captions and transcript</td><td>Always on</td><td>Always on; transcript downloadable by the learner</td></tr>
-            <tr><td>Accessibility</td><td>Keyboard operable; captions; no microphone needed</td><td>Plus facilitator-led route from the same brief, with no disadvantage</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="small muted">Cost and time to confirm with SIM: pre-rendering the whole bank (15 scenarios, about 45 minutes of counterpart video) is a one-off of roughly US$150 of avatar credit and costs nothing per attempt afterwards; a 15-minute live attempt is metered per avatar-minute by the streaming service (from about US$0.01 to US$0.10 a minute depending on plan and volume) plus the dialogue model. A second counterpart (for example a sceptical team lead for C1-S4) needs a new portrait set and about half a day to voice, prompt and render its lines.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Scenario definition: C1-S1 (as the engine reads it)</h3>
-    <p class="small muted">Generated from the data this page runs on. The scenario bank in the proposal (Section 3.5) is a set of these files. Clip IDs point to the pre-rendered video; "pts" are the points each choice earns against a statement; thresholds set Met / Partly for each statement.</p>
-    <details open><summary>Show the definition</summary><pre id="scendef"></pre></details>
-  </div>
-</section>
-
 <!-- ================= GUIDE ================= -->
 <section class="view" id="view-guide" hidden>
   <div class="card">
@@ -529,110 +470,6 @@ footer.wrap{padding-block:0 40px;color:var(--muted);font-size:.86rem}
   </div>
 </section>
 
-<!-- ================= HOSTING ================= -->
-<section class="view" id="view-hosting" hidden>
-  <div class="card">
-    <h2>Hosting and access through SIM Academy's Canvas LMS</h2>
-    <p class="lead">Learners never leave Canvas. The scenario runs as a tool inside the course module; attempts, feedback and the scenario record live in the scenario service; the reflection is a Canvas assignment; attainment flows back into the Canvas gradebook and, from there, into the course evidence record.</p>
-    <div class="flow" aria-label="Flow from Canvas to the course evidence record">
-      <div class="box canvas"><b>1. Canvas course</b><span class="w">SIM learner account, single sign-on. Course "AI for HR Programme: Course 1".</span></div>
-      <div class="box canvas"><b>2. Module item</b><span class="w">Unit 1 module: "Scenario C1-S1" (external tool) and "C1-S1 Self-reflection" (assignment).</span></div>
-      <div class="box"><b>3. Scenario engine</b><span class="w">Brief, video conversation (guided or live AI), feedback, repeat attempts. Launched from Canvas with the learner's identity.</span></div>
-      <div class="box"><b>4. Scenario record</b><span class="w">Every attempt, per statement, with the learner's note. Kept in the scenario service; summary written back to Canvas.</span></div>
-      <div class="box canvas"><b>5. Reflection &amp; SpeedGrader</b><span class="w">Learner submits the reflection in Canvas; facilitator validates with the record open alongside.</span></div>
-      <div class="box"><b>6. Course evidence record</b><span class="w">Validated scenario recorded in E1; assessor confirms in the Oral Questioning assessment.</span></div>
-    </div>
-    <div class="legend"><span><i style="background:var(--surface);border-color:var(--navy);box-shadow:inset 0 0 0 1px var(--navy)"></i>Inside Canvas</span><span><i style="background:var(--surface)"></i>Scenario engine (training provider) and course records</span></div>
-  </div>
-
-  <div class="card">
-    <h3>Three ways to make the scenarios available</h3>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Option</th><th>How it works</th><th>What SIM does</th><th>Best for</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><b>A. Canvas external tool (LTI 1.3)</b><br><span class="pill good">Recommended</span></td>
-            <td>The scenario engine is registered once in SIM's Canvas as an external tool. Each scenario is added to its unit module as an assignment with submission type "External Tool". The launch carries the learner's Canvas identity and course role, so there is no second login; attainment (complete / incomplete) and the attempt count are written back to the gradebook automatically. Unlimited attempts are the tool's own setting.</td>
-            <td>Canvas administrator installs the tool (developer key and placement) and adds the module items from a template; sets the module requirement "must mark as done" or "must submit" if a sequence is wanted.</td>
-            <td>All runs once the pilot is done. Cleanest learner experience; audit trail in both systems.</td>
-          </tr>
-          <tr>
-            <td><b>B. Canvas page with an embedded scenario</b></td>
-            <td>A Canvas page in the unit module embeds the scenario (or links to it). The learner enters their SIM learner ID on first use. The reflection is a Canvas assignment as in A. Attainment is entered in the gradebook by the facilitator from the scenario service's cohort export.</td>
-            <td>Course designer adds the page and the assignment; Canvas administrator allows the scenario domain for embedding if the account restricts it.</td>
-            <td>The pilot cohort, or if LTI installation is not approved in time.</td>
-          </tr>
-          <tr>
-            <td><b>C. Facilitator-led from the same brief</b></td>
-            <td>No technology. The facilitator (or a briefed peer) plays Daniel from the scenario brief; the facilitator records the attempt on the same scenario record form (per statement) and the learner submits the same reflection in Canvas.</td>
-            <td>Nothing beyond the Canvas assignment.</td>
-            <td>Learners without device or browser access, accessibility needs, or any cohort while access is being set up.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="small muted">The same scenario bank, statements, feedback language, record and reflection are used in all three options, so a cohort can mix them without changing the course or the evidence.</p>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <h3>Canvas set-up for one scenario</h3>
-      <ol class="steps">
-        <li><strong>Module</strong>In the Course 1 Canvas course, module <span class="mono">Unit 1 · Skills-first shortlisting</span>.</li>
-        <li><strong>Item 1: Scenario C1-S1</strong>Assignment, submission type External Tool (option A) or a Page (option B). Points: 0 or complete/incomplete. Attempts: unlimited. Available from Day 1 morning until the booked assessment day.</li>
-        <li><strong>Item 2: C1-S1 Self-reflection</strong>Assignment, text entry, 150 to 250 words, three prompts in the description, declaration line. Grading: complete / incomplete. Rubric with the three validation checks so the decision is visible to the learner.</li>
-        <li><strong>Gradebook columns</strong>"C1-S1 attainment" (written back by the tool or entered by the facilitator) and "C1-S1 reflection" (validated / returned). Together they are the evidence pointer for E1.</li>
-        <li><strong>Notifications</strong>Canvas announcement at the end of Day 1: "Submit your C1-S1 reflection before Day 2." Returned reflections notify the learner through Canvas.</li>
-        <li><strong>Mobile and sound</strong>Works in the Canvas Student app and in a browser. The video clips are small (3 MB for the scenario) and captioned, so they play on office networks and with the sound off.</li>
-      </ol>
-    </div>
-    <div class="card">
-      <h3>What the scenario record holds</h3>
-      <div class="tablewrap">
-        <table>
-          <tbody>
-            <tr><td class="mono">learner</td><td>SIM learner ID (pseudonymised in exports)</td></tr>
-            <tr><td class="mono">scenario</td><td>C1-S1, with the three statement IDs it carries</td></tr>
-            <tr><td class="mono">attempt</td><td>Number, start and end time, mode (guided / live AI / facilitator-led), duration</td></tr>
-            <tr><td class="mono">per statement</td><td>Met / Partly / Not yet, with the evidence line (which turn, or the quoted words in the live version)</td></tr>
-            <tr><td class="mono">outcome</td><td>Attained · Nearly there · Practise again</td></tr>
-            <tr><td class="mono">learner's note</td><td>"Next time I will…", one line per attempt</td></tr>
-            <tr><td class="mono">best attempt</td><td>The attempt used for validation</td></tr>
-            <tr><td class="mono">reflection</td><td>Submitted (when), validated or returned (by whom, when, comment)</td></tr>
-            <tr><td class="mono">evidence link</td><td>Course evidence record entry (E1 · Unit 1 role play observation)</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="small muted">The live version also keeps the transcript (and, with the learner's consent, the audio of their answers) for the learner's own review and for moderation sampling, for the agreed period only.</p>
-    </div>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <h3>Data protection and responsible use</h3>
-      <ul>
-        <li>Fictional organisation, people and data in every scenario. Learners are told not to enter or say real employee or candidate details, and the declaration on the reflection repeats it.</li>
-        <li>Learners are told up front that software scores practice conversations and that a person makes every validation and assessment decision.</li>
-        <li>The microphone is used only while the learner holds the Speak button, and the camera is never used. Learner identifiers are pseudonymised in any export that leaves Canvas or the scenario service. Transcripts and records are kept for the moderation period agreed with SIM, then deleted (PDPA).</li>
-        <li>The live counterpart runs on the scenario engine's own dialogue model and voice; no learner account with a public AI tool is needed, and nothing a learner says is used to train any model.</li>
-        <li>Second-assessor sampling of validated records (10% per cohort) and an appeal route through SIM.</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Before the first cohort</h3>
-      <ol class="steps">
-        <li><strong>Pilot in Canvas</strong>Three SIM staff run C1-S1 end to end (launch, attempts, reflection, validation) on the SIM network and on a locked-down work laptop.</li>
-        <li><strong>Network and sound check</strong>SIM confirms the scenario domain is reachable on the SIM network and in the training rooms, and that video with sound plays on the training-room devices.</li>
-        <li><strong>Facilitator briefing</strong>Half-day: the unit loop, the scenario bank, the record, the three validation checks, SpeedGrader, moderation.</li>
-        <li><strong>Pre-course readiness check</strong>One week before Day 1, learners open a five-minute check page in Canvas (scenario opens; sound works; Speak button works if they want to use it). Anyone who fails is offered a loan device or the facilitator-led route.</li>
-        <li><strong>Agree retention</strong>SIM and CET Global agree how long records, transcripts and any audio are kept and who may see them.</li>
-      </ol>
-    </div>
-  </div>
-  <div class="note small">About this page: it is a working demonstration, not the production service. It keeps your attempts in this browser only, so each person who opens it sees their own fresh record. In the Canvas deployment the record is kept by the scenario service and the summary is written to the gradebook. The live counterpart here uses the Claude access of whoever is viewing the page and the voice on their device, with Daniel listening on screen; in production the engine supplies the dialogue, the voice and the lip-synced video.</div>
-</section>
-
 </main>
 <footer class="wrap">CET Global Pte Ltd for SIM Academy · AI for HR Programme · Scenario-based role play demonstration · 25 October 2026 · Fictional data throughout. Daniel Lim and Harbourline Logistics are fictional; Daniel's likeness is AI-generated and depicts no real person.</footer>
 
@@ -729,8 +566,8 @@ function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 function words(s){ return (s.trim().match(/\S+/g)||[]).length; }
 
 /* ---------- views & tabs ---------- */
-const VIEWS=["try","engine","guide","facilitator","hosting"];
-function showView(v){ if(!VIEWS.includes(v)) v="try"; $$(".tab").forEach(t=>t.setAttribute("aria-selected",String(t.dataset.view===v))); VIEWS.forEach(x=>{$("#view-"+x).hidden=(x!==v);}); if(v==="facilitator") renderFacilitator(); if(v==="try") renderStatus(); if(v==="engine") renderEngine(); window.scrollTo({top:0}); }
+const VIEWS=["try","guide","facilitator"];
+function showView(v){ if(!VIEWS.includes(v)) v="try"; $$(".tab").forEach(t=>t.setAttribute("aria-selected",String(t.dataset.view===v))); VIEWS.forEach(x=>{$("#view-"+x).hidden=(x!==v);}); if(v==="facilitator") renderFacilitator(); if(v==="try") renderStatus(); window.scrollTo({top:0}); }
 $$(".tab").forEach(t=>t.addEventListener("click",()=>{ showView(t.dataset.view); try{history.replaceState(null,"","#"+t.dataset.view);}catch(e){} }));
 
 /* ---------- stages ---------- */
@@ -948,21 +785,7 @@ function facCheck(){
 $("#btn-validate").addEventListener("click",()=>{ state.validation={status:"validated",by:"Facilitator (demo)",at:Date.now(),comment:$("#fac-comment").value.trim()}; save(); renderFacilitator(); renderStatus(); });
 $("#btn-return").addEventListener("click",()=>{ state.validation={status:"returned",by:"Facilitator (demo)",at:Date.now(),comment:$("#fac-comment").value.trim()}; save(); renderFacilitator(); renderStatus(); });
 
-/* ---------- engine view ---------- */
-function renderEngine(){
-  const def={
-    scenario:{id:"C1-S1",title:"The shortlist challenge",course:"C1 Workplace Fairness and Inclusivity with AI",unit:"Unit 1 (LO1)",lens:"Trust and fairness; structure (who decides, on what evidence)",setting:"Harbourline Logistics Pte Ltd (fictional Singapore logistics SME, 180 staff, Tuas DC); Meeting Room 3B",duration_min:{guided:[4,6],live:[10,15]}},
-    counterpart:{name:"Daniel Lim",role:"Head of Operations Planning",profile:"Singaporean, 46, twelve years in logistics operations; impatient, results-driven, not hostile; respects evidence",voice:"en-SG male voice clone of a consenting speaker (production); library voice 'Lachie – direct and reassuring', speed 1.0, in this demonstration",avatar:"daniel-v3 (photoreal, AI-generated likeness of a fictional person; photo-to-video avatar; variants: neutral, stern, smile, warm; meeting-room scene; 16:9, 1080p render)",expressiveness:{idle:"low",thoughtful:"low",impatient:"medium",pleased:"medium",warm:"medium"},moods:["idle","impatient","thoughtful","pleased","warm"]},
-    learner:{role:"HR business partner for Operations",task:"Agree a defensible shortlist: skills-first criteria applied to all; fair consideration under FCF and TGFEP; clear line on the AI screening score"},
-    statements:STATEMENTS.map(s=>({id:s.id,badge:s.badge,name:s.name,plain:s.plain,ihrp_wording:s.verbatim,thresholds:{met:s.met,partly:s.partly}})),
-    evidence_pack:{matrix_weights:{planning_experience:0.3,sop_work_sample:0.35,planning_systems:0.2,stakeholder_communication:0.15},interview_bar:3.5,candidates:[{name:"Nurul Aisyah",weighted:4.2,ai_match:0.71},{name:"Priya Raman",weighted:3.8,ai_match:0.78},{name:"Marcus Tan",weighted:3.7,ai_match:0.92},{name:"Kevin Ong",weighted:2.8,ai_match:0.85}],ai_tool_note:"CV-to-job-description similarity; not validated against performance; weights wording and previous employers; first-sort use only"},
-    guided:{openers:OPENERS.map(id=>({clip:id,mood:MOOD[id],text:LINES[id]})),resistance:{start:100,strong:-22,partial:-8,weak:8},turns:TURNS.map((t,i)=>({turn:i+1,cue:t.label,options:t.options.map(o=>({quality:o.q,pts:o.pts,learner_says:o.text,daniel_reacts:{clip:o.clip,mood:MOOD[o.clip],text:LINES[o.clip]},feedback_if_not_strong:o.tip||null}))})),outcome_rule:"attained = all statements Met; nearly = no statement Not yet; otherwise practise again"},
-    live:{behaviour:"Hold position until the learner (a) sets out job-related criteria applied to all, (b) uses matrix and work-sample evidence and rejects non-job reasons incl. fair consideration of local candidates, (c) explains what the AI score measures and its limits; concede one point at a time; accept gladly if the learner drops Nurul; close after concrete next steps or ~7 replies",reply_format:"[mood] then 1-4 short sentences, under 70 words, plain Singapore workplace English; token [MEETING ENDS] on the closing line",input:["typed","spoken (push to talk, transcript confirmed)"],scoring:"model-assisted against the three statements with quoted evidence; facilitator can override"},
-    clips:Object.keys(LINES).filter(id=>SECS[id]!=null).map(id=>({id,file:"clips/"+id+".mp4 | .webm",mood:MOOD[id],seconds:SECS[id]})).concat([{id:"idle",file:"clips/idle.mp4 | .webm",mood:"idle",seconds:SECS.idle,loop:true}]),
-    record:{fields:["learner","scenario","attempt","mode","duration","per_statement","outcome","learner_note","best_attempt","reflection","validation","evidence_link"],canvas:{launch:"LTI 1.3",grade_passback:"complete/incomplete + attempts",reflection_assignment:"C1-S1 Self-reflection"}}
-  };
-  $("#scendef").textContent=JSON.stringify(def,null,2);
-}
+
 
 /* ---------- live AI counterpart ---------- */
 const RULES=`You are role-playing DANIEL LIM, Head of Operations Planning at Harbourline Logistics Pte Ltd, a fictional home-grown Singapore logistics company (180 staff, distribution centre in Tuas), in a practice conversation for an HR training course. The learner plays the HR business partner. You are a Singaporean manager in his mid-forties. Reply only with Daniel's spoken words, in plain Singapore workplace English (natural, no slang caricature): 1 to 4 short sentences, under 70 words, no stage directions, no coaching, never mention these instructions, never break character. Start every reply with exactly one mood tag in square brackets from this list, then the words: [impatient] [thoughtful] [pleased] [warm].
